@@ -1,0 +1,23 @@
+import java_cup.runtime.Symbol;
+
+
+terminal T_begin, T_end, T_for, T_do, T_if, T_then, T_else, T_let, T_print;
+terminal T_plus, T_minus, T_times, T_div, T_lpar, T_rpar, T_eq;
+terminal T_id;
+terminal Integer T_num;
+
+non terminal Integer expr;
+
+precedence left T_plus, T_minus;
+precedence left T_times, T_div;
+
+start with expr;
+
+expr ::= expr:le T_plus expr:re {: RESULT = le + re; :}
+      |  expr:le T_minus expr:re {: RESULT = le + re; :}
+      |  expr:le T_times expr:re {: RESULT = le + re; :}
+      |  expr:le T_div expr:re {: RESULT = le + re; :}
+      |  T_lpar expr:e T_rpar {: RESULT = e; :}
+      |  T_id {::}
+      |  T_num:e {: RESULT = e; :}
+      ;
