@@ -2,17 +2,24 @@ import java_cup.runtime.Symbol;
 
 
 terminal T_begin, T_end, T_for, T_do, T_if, T_then, T_else, T_let, T_print;
-terminal T_plus, T_minus, T_times, T_div, T_lpar, T_rpar, T_eq;
+terminal T_plus, T_minus, T_times, T_div, T_modulo, T_and, T_or, T_not, T_deq, T_eq, T_neq, T_less, T_greater, T_less_or_eq, T_greater_or_eq;
+terminal T_lpar, T_rpar,T_lsquare,T_rsquare,T_lsquigly,T_rsquigly,T_comma,T_colon,T_semicolon;
 terminal T_id;
 terminal Integer T_num;
+terminal String T_char_literal;
 
 non terminal Integer expr;
+non terminal String prog;
 
 precedence left T_plus, T_minus;
 precedence left T_times, T_div;
 
-start with expr;
+start with prog;
 
+prog ::=
+       |  expr:e  {: RESULT = e.toString(); :}
+       |  T_char_literal:e {: RESULT = e; :}
+       ;
 expr ::= expr:le T_plus expr:re {: RESULT = le + re; :}
       |  expr:le T_minus expr:re {: RESULT = le + re; :}
       |  expr:le T_times expr:re {: RESULT = le + re; :}
