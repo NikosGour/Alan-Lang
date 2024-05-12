@@ -35,8 +35,17 @@ d     =      [0-9]
 hex   =      {d}|[A-Fa-f]
 escape_char = ([ntr0]|\\|\'|\")
 
-Number = {d}+
+Identifier        = {l}({l}|{d}|_)+
+Number            = {d}+
+Char              = \'({l}|{d}|\\x{hex}{hex}?|\\{escape_char})\'
+String            = \"({l}|{d}|\\x{hex}{hex}?|\\{escape_char})*\"
+Comment           = --.*
+Comment_Multiline = \(\*~\*\)
+
 %%
+{Comment}                                {}
+{Comment_Multiline}                      {}
+
 "false"                                  { return createSymbol(Symbols.T_false); }
 "true"                                   { return createSymbol(Symbols.T_true); }
 "int"                                    { return createSymbol(Symbols.T_int); }
@@ -73,19 +82,17 @@ Number = {d}+
 ":"                                      { return createSymbol(Symbols.T_colon); }
 ";"                                      { return createSymbol(Symbols.T_semicolon); }
 
-\'({l}|{d}|\\x{hex}{hex}?|\\{escape_char})\' { String x = yytext();
-                                            System.out.printf("Found char literal: `%s`\n",yytext());
+{Char}                                   { String x = yytext();
+                                            //System.out.printf("Found char literal: `%s`\n",yytext());
                                            return createSymbol(Symbols.T_char_literal, x.substring(1 , x.length() - 1));}
 
-\"({l}|{d}|\\x{hex}{hex}?|\\{escape_char})*\" { String x = yytext();
-                                           System.out.printf("Found string literal: `%s`\n",yytext());
+{String}                                 { String x = yytext();
+                                           //System.out.printf("Found string literal: `%s`\n",yytext());
                                            return createSymbol(Symbols.T_string_literal, x.substring(1 , x.length() - 1));}
 
-{l}({l}|{d}|_)+                           { System.out.printf("Found id literal: `%s`\n",yytext());
-                                            return createSymbol(Symbols.T_id, yytext()); }
-{Number}                                     {System.out.printf("Found num literal: `%s`\n",yytext());
-                                            return createSymbol(Symbols.T_num, Integer.valueOf(yytext())); }
+{Identifier}                           { return createSymbol(Symbols.T_id, yytext()); }
+{Number}                                     { return createSymbol(Symbols.T_num, Integer.valueOf(yytext())); }
 
 
 {ws}                                     {}
-.*                                       { System.err.printf("!Captured Unexpected string `%s`\n",yytext());}
+\'.*                                       { System.err.printf("!Captured Unexpected string `%s`\n",yytext());}
