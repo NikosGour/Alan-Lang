@@ -23,9 +23,9 @@ prog ::=
        |  T_string_literal:e {: RESULT = e; :}
        ;
 expr ::= expr:le T_plus expr:re {: RESULT = le + re; :}
-      |  expr:le T_minus expr:re {: RESULT = le + re; :}
-      |  expr:le T_times expr:re {: RESULT = le + re; :}
-      |  expr:le T_div expr:re {: RESULT = le + re; :}
+      |  expr:le T_minus expr:re {: RESULT = le - re; :}
+      |  expr:le T_times expr:re {: RESULT = le * re; :}
+      |  expr:le T_div expr:re {: RESULT = le / re; :}
       |  T_lpar expr:e T_rpar {: RESULT = e; :}
       |  T_id {::}
       |  T_num:e {: RESULT = e; :}

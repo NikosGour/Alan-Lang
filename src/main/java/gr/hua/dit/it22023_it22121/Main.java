@@ -10,7 +10,7 @@ public class Main {
 		Reader r = new InputStreamReader(System.in);
 		Lexer l = new Lexer(r);
 		Parser p = new Parser(l);
-		final Boolean RUN_PARSER = false;
+		final Boolean RUN_PARSER = true;
 		if (RUN_PARSER) {
 			
 			try {
