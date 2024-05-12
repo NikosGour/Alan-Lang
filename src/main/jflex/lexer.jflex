@@ -27,24 +27,24 @@ import java_cup.runtime.Symbol;
     }
 %}
 
-delim =      [ \t\n]
+end_of_line = \r|\n|\r\n
+delim =      [ \t\f] | {end_of_line}
 ws    =      {delim}+
 l     =      [A-Za-z]
 d     =      [0-9]
 hex   =      {d}|[A-Fa-f]
 escape_char = ([ntr0]|\\|\'|\")
 
+Number = {d}+
 %%
-
-"false"
-"true"
-"int"
-"byte"
-"proc"
-"reference"
-"while"
+"false"                                  { return createSymbol(Symbols.T_false); }
+"true"                                   { return createSymbol(Symbols.T_true); }
+"int"                                    { return createSymbol(Symbols.T_int); }
+"byte"                                   { return createSymbol(Symbols.T_byte); }
+"proc"                                   { return createSymbol(Symbols.T_proc); }
+"reference"                              { return createSymbol(Symbols.T_reference); }
+"while"                                  { return createSymbol(Symbols.T_while); }
 "if"                                     { return createSymbol(Symbols.T_if);  }
-"then"                                   { return createSymbol(Symbols.T_then); }
 "else"                                   { return createSymbol(Symbols.T_else); }
 
 "+"                                      { return createSymbol(Symbols.T_plus); }
@@ -73,10 +73,19 @@ escape_char = ([ntr0]|\\|\'|\")
 ":"                                      { return createSymbol(Symbols.T_colon); }
 ";"                                      { return createSymbol(Symbols.T_semicolon); }
 
-\'({l}|\\x{hex}{hex}?|\\{escape_char})\' { String x = yytext();
+\'({l}|{d}|\\x{hex}{hex}?|\\{escape_char})\' { String x = yytext();
+                                            System.out.printf("Found char literal: `%s`\n",yytext());
                                            return createSymbol(Symbols.T_char_literal, x.substring(1 , x.length() - 1));}
-{l}+                                     { return createSymbol(Symbols.T_id, yytext()); }
-{d}+                                     { return createSymbol(Symbols.T_num, Integer.valueOf(yytext())); }
+
+\"({l}|{d}|\\x{hex}{hex}?|\\{escape_char})*\" { String x = yytext();
+                                           System.out.printf("Found string literal: `%s`\n",yytext());
+                                           return createSymbol(Symbols.T_string_literal, x.substring(1 , x.length() - 1));}
+
+{l}({l}|{d}|_)+                           { System.out.printf("Found id literal: `%s`\n",yytext());
+                                            return createSymbol(Symbols.T_id, yytext()); }
+{Number}                                     {System.out.printf("Found num literal: `%s`\n",yytext());
+                                            return createSymbol(Symbols.T_num, Integer.valueOf(yytext())); }
+
 
 {ws}                                     {}
-.*                                       { System.out.printf("Captured Unexpected string \"%s\"\n",yytext());}
+.*                                       { System.err.printf("!Captured Unexpected string `%s`\n",yytext());}

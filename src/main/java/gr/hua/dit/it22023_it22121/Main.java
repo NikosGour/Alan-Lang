@@ -10,17 +10,23 @@ public class Main {
 		Reader r = new InputStreamReader(System.in);
 		Lexer l = new Lexer(r);
 		Parser p = new Parser(l);
-		try {
-			String result = (String) p.parse().value;
-			System.out.println("Result = " + result);
+		final Boolean RUN_PARSER = false;
+		if (RUN_PARSER) {
+			
+			try {
+				String result = (String) p.parse().value;
+				System.out.println("Result = " + result);
+			}
+			catch (Exception e) {
+				System.err.println("Error: " + e.getMessage());
+			}
 		}
-		catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+		else {
+			//		 Run Lexer
+			while (! l.yyatEOF()) {
+				Symbol next = l.next_token();
+				System.out.printf("Token = %s\n" , next);
+			}
 		}
-		// Run Lexer
-		//		while (! l.yyatEOF()) {
-		//			Symbol next = l.next_token();
-		//			System.out.printf("Token = %s" , next);
-		//		}
 	}
 }
