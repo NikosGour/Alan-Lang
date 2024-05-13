@@ -10,6 +10,7 @@ public class Main {
 		Reader r = new InputStreamReader(System.in);
 		Lexer l = new Lexer(r);
 		Parser p = new Parser(l);
+		
 		final Boolean RUN_PARSER = false;
 		if (RUN_PARSER) {
 			
@@ -23,9 +24,17 @@ public class Main {
 		}
 		else {
 			//		 Run Lexer
+			Symbol prev = null;
 			while (! l.yyatEOF()) {
-				Symbol next = l.next_token();
-				System.out.printf("Token = %s\n" , next);
+				try {
+					Symbol next = l.next_token();
+					System.out.printf("Token = %s\n" , next);
+					prev = next;
+				}
+				catch (Error e) {
+					System.out.printf("Error at line:%d, column:%d\n" , prev.left , prev.right);
+					throw e;
+				}
 			}
 		}
 	}
