@@ -1,0 +1,86 @@
+main () : proc
+ bsort (n : int, x : reference int []) : proc
+4
+5 swap (x : reference int, y : reference int) : proc
+6 t : int;
+7 {
+8 t = x;
+9 x = y;
+10 y = t;
+11 }
+12
+13 changed : bytehs;
+14
+15 i : int;
+16
+17 { -- bsort
+18 changed = 'y';
+19 while (changed == 'y') {
+20 changed = 'n';
+21 i = 0;
+22 while (i < n1) {
+23 if (x[i] > x[i+1]) {
+24 swap(x[i], x[i+1]);
+25 changed = 'y';
+26 }
+27 i = i + 1;
+28 }
+29 }
+30 } -- bsort
+31
+32 writeArray(msg : reference byte[], n:int, x : reference int[]) : proc
+33 i : int;
+34 {
+35 writeString(msg);
+36 i = 0;
+37 while (i < n) {
+38 if (i > 0) writeString(",");
+39 writeInteger(x[i]);
+40 i = i+1;
+41 }
+42 writeString("\n");
+43 }
+44
+45 seed : int;
+46 x : int[16];
+47 i : int;
+48
+49 { -- main
+18
+50 seed = 65;
+51
+i = 0;
+52 while
+(
+i < 16){
+53 seed = (seed * 137 + 220 +
+i) % 101;
+54
+x
+[
+i] = seed
+;
+55
+i
+=
+i + 1;
+56
+}
+57 writeArray
+(
+"Initial array
+:
+", 16,
+x);
+58 bsort(16,
+x);
+59 writeArray
+(
+"Sorted array
+:
+", 16,
+x);
+60
+} -- main
+19
+4 Οδηγίες γ
