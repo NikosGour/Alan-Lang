@@ -2,6 +2,7 @@ package gr.hua.dit.it22023_it22121;
 
 import java.io.*;
 import java_cup.runtime.Symbol;
+import java.util.Stack;
 
 %%
 
@@ -17,6 +18,7 @@ import java_cup.runtime.Symbol;
 
 %{
     private StringBuffer sb = new StringBuffer();
+    private Stack<Integer> comment_stack = new Stack<>();
 
     private Symbol createSymbol(int type) {
         return new Symbol(type, yyline+1, yycolumn+1);
@@ -27,24 +29,24 @@ import java_cup.runtime.Symbol;
     }
 %}
 
+%xstate COMMENT
+
 end_of_line = \r|\n|\r\n
-delim =      [ \t\f] | {end_of_line}
-ws    =      {delim}+
-l     =      [A-Za-z]
-d     =      [0-9]
-hex   =      {d}|[A-Fa-f]
-escape_char = ([ntr0]|\\|\'|\")
+delim       = [ \t\f] | {end_of_line}
+whitespace  = {delim}+
+l           = [A-Za-z]
+d           = [0-9]
+hex         = {d}|[A-Fa-f]
+escape_char = ([ntr0]|\n\|\'|\")
 
 Identifier        = {l}({l}|{d}|_)+
 Number            = {d}+
 Char              = \'({l}|{d}|\\x{hex}{hex}?|\\{escape_char})\'
 String            = \"({l}|{d}|\\x{hex}{hex}?|\\{escape_char})*\"
 Comment           = --.*
-Comment_Multiline = \(\*~\*\)
 
 %%
 {Comment}                                {}
-{Comment_Multiline}                      {}
 
 "false"                                  { return createSymbol(Symbols.T_false); }
 "true"                                   { return createSymbol(Symbols.T_true); }
@@ -82,17 +84,33 @@ Comment_Multiline = \(\*~\*\)
 ":"                                      { return createSymbol(Symbols.T_colon); }
 ";"                                      { return createSymbol(Symbols.T_semicolon); }
 
-{Char}                                   { String x = yytext();
-                                            //System.out.printf("Found char literal: `%s`\n",yytext());
-                                           return createSymbol(Symbols.T_char_literal, x.substring(1 , x.length() - 1));}
+{Char}                                   { String x= yytext();
+//                                        System.out.printf("Found char literal: `%s`\n",yytext());
+                                           return createSymbol(Symbols.T_char_literal  , x.substring(1                , x.length() - 1));}
 
-{String}                                 { String x = yytext();
+{String}                                 { String x                                     = yytext();
                                            //System.out.printf("Found string literal: `%s`\n",yytext());
-                                           return createSymbol(Symbols.T_string_literal, x.substring(1 , x.length() - 1));}
+                                           return createSymbol(Symbols.T_string_literal, x.substring(1                , x.length() - 1));}
 
-{Identifier}                           { return createSymbol(Symbols.T_id, yytext()); }
-{Number}                                     { return createSymbol(Symbols.T_num, Integer.valueOf(yytext())); }
+{Identifier}                           { return createSymbol(Symbols.T_id              , yytext()); }
+{Number}                                     { return createSymbol(Symbols.T_num       , Integer.valueOf(yytext())); }
 
 
-{ws}                                     {}
+"(*"                        {
+//		                    System.out.println("Found opening comment");
+		                     comment_stack.push(1);
+	                            yybegin(COMMENT);}
+
+{whitespace}                                     {}
 \'.*                                       { System.err.printf("!Captured Unexpected string `%s`\n",yytext());}
+<COMMENT>{
+"(*"                        {comment_stack.push(1);}
+"*)"                        {Integer top = comment_stack.pop();
+	                        if(comment_stack.empty()) {
+//	                            System.out.println("Found closing comment FINAL");
+	                            yybegin(YYINITIAL);
+	                            }
+//							else {System.out.println("Found NOT FINAL closing comment");}
+	                        }
+. | \n          {}
+}
