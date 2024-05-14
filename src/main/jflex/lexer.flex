@@ -58,6 +58,7 @@ Comment           = --.*
 "while"                                  { return createSymbol(Symbols.T_while); }
 "if"                                     { return createSymbol(Symbols.T_if);  }
 "else"                                   { return createSymbol(Symbols.T_else); }
+"return"                                 { return createSymbol(Symbols.T_return); }
 
 "+"                                      { return createSymbol(Symbols.T_plus); }
 "-"                                      { return createSymbol(Symbols.T_minus); }

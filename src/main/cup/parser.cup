@@ -9,24 +9,130 @@ terminal Integer T_num;
 terminal String T_char_literal;
 terminal String T_string_literal;
 
-non terminal Integer expr;
-non terminal String prog;
+non terminal String program;
+non terminal func_def;
+non terminal fpar_list;
+non terminal fpar_def;
+non terminal data_type;
+non terminal type;
+non terminal r_type;
+non terminal local_def;
+non terminal var_def;
+non terminal stmt;
+non terminal compound_stmt;
+non terminal func_call;
+non terminal expr_list;
+non terminal expr;
+non terminal l_value;
+non terminal cond;
+
+non terminal fpar_list_extra;
+non terminal expr_list_extra;
+non terminal compound_stmt_extra;
+non terminal func_def_extra;
 
 precedence left T_plus, T_minus;
-precedence left T_times, T_div;
+precedence left T_times, T_div, T_modulo;
+precedence left T_and, T_or;
 
-start with prog;
+start with program;
 
-prog ::=
-       |  expr:e  {: RESULT = e.toString(); :}
-       |  T_char_literal:e {: RESULT = e; :}
-       |  T_string_literal:e {: RESULT = e; :}
+program ::= func_def;
+
+func_def ::= T_id T_lpar T_rpar T_colon r_type func_def_extra compound_stmt
+           | T_id T_lpar fpar_list T_rpar T_colon r_type func_def_extra compound_stmt
+           ;
+
+func_def_extra ::=
+                 | local_def func_def_extra
+                 ;
+
+fpar_list ::= fpar_def fpar_list_extra;
+
+fpar_list_extra ::=
+                  | T_comma fpar_def fpar_list_extra
+                  ;
+
+fpar_def ::= T_id T_colon type
+           | T_id T_colon T_reference type
+           ;
+
+data_type ::= T_int
+            | T_byte
+            ;
+
+type ::= data_type
+       | data_type T_lsquare T_rsquare
        ;
-expr ::= expr:le T_plus expr:re {: RESULT = le + re; :}
-      |  expr:le T_minus expr:re {: RESULT = le - re; :}
-      |  expr:le T_times expr:re {: RESULT = le * re; :}
-      |  expr:le T_div expr:re {: RESULT = le / re; :}
-      |  T_lpar expr:e T_rpar {: RESULT = e; :}
-      |  T_id {::}
-      |  T_num:e {: RESULT = e; :}
-      ;
+
+r_type ::= data_type
+         | T_proc
+         ;
+
+local_def ::= func_def
+            | var_def
+            ;
+
+var_def ::= T_id T_colon data_type T_semicolon
+          | T_id T_colon data_type T_lsquare T_num T_rsquare T_semicolon
+          ;
+
+stmt ::= T_semicolon
+       | l_value T_eq expr T_semicolon
+       | compound_stmt
+       | func_call T_semicolon
+       | T_if T_lpar cond T_rpar stmt
+       | T_if T_lpar cond T_rpar stmt T_else stmt
+       | T_while T_lpar cond T_rpar stmt
+       | T_return T_semicolon
+       | T_return expr T_semicolon
+       ;
+
+compound_stmt ::= T_lsquigly compound_stmt_extra T_rsquigly;
+
+compound_stmt_extra ::=
+                      | stmt compound_stmt_extra
+                      ;
+
+func_call ::= T_id T_lpar T_rpar
+            | T_id T_lpar expr_list T_rpar
+            ;
+
+expr_list ::= expr expr_list_extra;
+
+expr_list_extra ::=
+                  | T_comma expr expr_list_extra
+                  ;
+
+expr ::= T_num:e
+       | T_char_literal
+       | l_value
+       | T_lpar expr T_rpar
+       | func_call
+       | T_plus expr
+       | T_minus expr
+       | expr:le T_plus expr:re
+       | expr:le T_minus expr:re
+       | expr:le T_times expr:re
+       | expr:le T_div expr:re
+       | expr:le T_modulo expr:re
+       ;
+
+l_value ::= T_string_literal
+          | T_id T_lsquare expr T_rsquare
+          | T_id
+          ;
+
+cond ::= expr T_deq expr
+       | expr T_neq expr
+       | expr T_less expr
+       | expr T_greater expr
+       | expr T_less_or_eq expr
+       | expr T_greater_or_eq expr
+       | T_true
+       | T_false
+       | T_not cond
+       | cond T_and cond
+       | cond T_or cond
+       | T_lpar cond T_rpar
+       ;

@@ -19,7 +19,7 @@ public class Main {
 				System.out.println("Result = " + result);
 			}
 			catch (Exception e) {
-				System.err.println("Error: " + e.getMessage());
+				System.err.println("Our Error: " + e.getMessage());
 			}
 		}
 		else {
