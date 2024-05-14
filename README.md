@@ -3,13 +3,15 @@
 ## Authors:
 
 - Nikos Gournakis
-- Arvi Hotza
+- Arvi Hoxha
 
 ### Building the compiler
 
 ``mvn clean package``
 
 ### Building compiler and run tests
+
+#### this is currently not working
 
 ``python test_runner.py``
 
