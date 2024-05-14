@@ -12,9 +12,9 @@ solve () : proc
 
     { -- hanoi
         if (rings >= 1) {
-            hanoi(rings 1, source, auxiliary, target);
+            hanoi(rings-1, source, auxiliary, target);
             move(source, target);
-            hanoi(rings 1, auxiliary, target, source);
+            hanoi(rings-1, auxiliary, target, source);
         }
     } -- hanoi
 
