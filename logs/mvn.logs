@@ -1,0 +1,88 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for gr.hua.dit.it22023_it22121:compiler:jar:0.0.2
+[WARNING] The expression ${groupId} is deprecated. Please use ${project.groupId} instead.
+[WARNING] The expression ${groupId} is deprecated. Please use ${project.groupId} instead.
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] ----------------< gr.hua.dit.it22023_it22121:compiler >-----------------
+[INFO] Building compiler-lab02 0.0.2
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ compiler ---
+[INFO] Deleting /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target
+[INFO] 
+[INFO] --- jflex:1.9.0:generate (default) @ compiler ---
+[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/generated-sources/jflex/gr/hua/dit/it22023_it22121/Lexer.java
+[INFO] 
+[INFO] --- cup:11b-20160615-2:generate (default) @ compiler ---
+Warning : Terminal "T_false" was declared but never used
+Warning : Terminal "T_or" was declared but never used
+Warning : Terminal "T_rsquigly" was declared but never used
+Warning : Terminal "T_neq" was declared but never used
+Warning : Terminal "T_if" was declared but never used
+Warning : Terminal "T_less" was declared but never used
+Warning : Terminal "T_deq" was declared but never used
+Warning : Terminal "T_eq" was declared but never used
+Warning : Terminal "T_semicolon" was declared but never used
+Warning : Terminal "T_reference" was declared but never used
+Warning : Terminal "T_greater_or_eq" was declared but never used
+Warning : Terminal "T_lsquare" was declared but never used
+Warning : Terminal "T_rsquare" was declared but never used
+Warning : Terminal "T_comma" was declared but never used
+Warning : Terminal "T_true" was declared but never used
+Warning : Terminal "T_lsquigly" was declared but never used
+Warning : Terminal "T_byte" was declared but never used
+Warning : Terminal "T_return" was declared but never used
+Warning : Terminal "T_else" was declared but never used
+Warning : Terminal "T_int" was declared but never used
+Warning : Terminal "T_modulo" was declared but never used
+Warning : Terminal "T_less_or_eq" was declared but never used
+Warning : Terminal "T_and" was declared but never used
+Warning : Terminal "T_not" was declared but never used
+Warning : Terminal "T_colon" was declared but never used
+Warning : Terminal "T_proc" was declared but never used
+Warning : Terminal "T_greater" was declared but never used
+Warning : Terminal "T_while" was declared but never used
+[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/generated-sources/cup/gr/hua/dit/it22023_it22121/Parser.java
+[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/generated-sources/cup/gr/hua/dit/it22023_it22121/Symbols.java
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ compiler ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.8.1:compile (default-compile) @ compiler ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 4 source files to /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/classes
+[INFO] /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/java/gr/hua/dit/it22023_it22121/Main.java: /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/java/gr/hua/dit/it22023_it22121/Main.java uses or overrides a deprecated API.
+[INFO] /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/java/gr/hua/dit/it22023_it22121/Main.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ compiler ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.8.1:testCompile (default-testCompile) @ compiler ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.2:test (default-test) @ compiler ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.3.0:jar (default-jar) @ compiler ---
+[INFO] Building jar: /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/compiler-0.0.2.jar
+[INFO] 
+[INFO] --- shade:3.2.0:shade (default) @ compiler ---
+[INFO] Including com.github.vbmacher:java-cup-runtime:jar:11b-20160615-2 in the shaded jar.
+[INFO] Replacing original artifact with shaded artifact.
+[INFO] Replacing /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/compiler-0.0.2.jar with /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/compiler-0.0.2-shaded.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.554 s
+[INFO] Finished at: 2024-05-14T11:55:35+03:00
+[INFO] ------------------------------------------------------------------------
