@@ -1,5 +1,5 @@
 import java_cup.runtime.Symbol;
-
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.*;
 
 terminal T_byte,T_else,T_false,T_if,T_int,T_proc,T_reference,T_return,T_while,T_true;
 terminal T_plus, T_minus, T_times, T_div, T_modulo, T_and, T_or, T_not, T_deq, T_eq, T_neq, T_less, T_greater, T_less_or_eq, T_greater_or_eq;
@@ -9,7 +9,7 @@ terminal Integer T_num;
 terminal String T_char_literal;
 terminal String T_string_literal;
 
-non terminal String program;
+non terminal Program program;
 non terminal func_def;
 non terminal fpar_list;
 non terminal fpar_def;
@@ -106,21 +106,21 @@ expr_list_extra ::=
 
 expr ::= T_num:e
        | T_char_literal
-       | l_value
-       | T_lpar expr T_rpar
+       | l_value:e {: RESULT = e;:}
+       | T_lpar expr:e T_rpar  {: RESULT = e;:}
        | func_call
        | T_plus expr
        | T_minus expr
-       | expr:le T_plus expr:re
-       | expr:le T_minus expr:re
-       | expr:le T_times expr:re
-       | expr:le T_div expr:re
-       | expr:le T_modulo expr:re
+       | expr:le T_plus expr:re {: RESULT = new PlusOp(le,re); :}
+       | expr:le T_minus expr:re {: RESULT = new MinusOp(le,re); :}
+       | expr:le T_times expr:re {: RESULT = new TimesOp(le,re); :}
+       | expr:le T_div expr:re {: RESULT = new DivisionOp(le,re); :}
+       | expr:le T_modulo expr:re {: RESULT = new ModuloOp(le,re); :}
        ;
 
 l_value ::= T_string_literal
           | T_id T_lsquare expr T_rsquare
-          | T_id
+          | T_id:id  {: RESULT = new Id(id); :}
           ;
 
 cond ::= expr T_deq expr

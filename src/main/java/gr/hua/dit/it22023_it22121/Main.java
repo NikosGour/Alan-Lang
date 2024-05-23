@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22121;
 
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Program;
 import java_cup.runtime.Symbol;
 
 import java.io.*;
@@ -15,7 +16,7 @@ public class Main {
 		if (RUN_PARSER) {
 			
 			try {
-				String result = (String) p.parse().value;
+				Program result = (Program) p.parse().value;
 				System.out.println("Result = " + result);
 			}
 			catch (Exception e) {
