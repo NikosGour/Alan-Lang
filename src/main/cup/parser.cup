@@ -1,5 +1,6 @@
 import java_cup.runtime.Symbol;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.*;
+import java.util.*;
 
 terminal T_byte,T_else,T_false,T_if,T_int,T_proc,T_reference,T_return,T_while,T_true;
 terminal T_plus, T_minus, T_times, T_div, T_modulo, T_and, T_or, T_not, T_deq, T_eq, T_neq, T_less, T_greater, T_less_or_eq, T_greater_or_eq;
@@ -11,23 +12,23 @@ terminal String T_string_literal;
 
 non terminal Program program;
 non terminal func_def;
-non terminal fpar_list;
-non terminal fpar_def;
-non terminal data_type;
-non terminal type;
+non terminal Deque<Parameter> fpar_list;
+non terminal Parameter fpar_def;
+non terminal BasicType data_type;
+non terminal Type type;
 non terminal r_type;
 non terminal local_def;
 non terminal var_def;
 non terminal stmt;
 non terminal compound_stmt;
 non terminal func_call;
-non terminal expr_list;
-non terminal expr;
-non terminal l_value;
+non terminal Deque<Expression> expr_list;
+non terminal Expression expr;
+non terminal Expression l_value;
 non terminal cond;
 
-non terminal fpar_list_extra;
-non terminal expr_list_extra;
+non terminal Deque<Parameter> fpar_list_extra;
+non terminal Deque<Expression> expr_list_extra;
 non terminal compound_stmt_extra;
 non terminal func_def_extra;
 
@@ -39,30 +40,30 @@ start with program;
 
 program ::= func_def;
 
-func_def ::= T_id T_lpar T_rpar T_colon r_type func_def_extra compound_stmt
-           | T_id T_lpar fpar_list T_rpar T_colon r_type func_def_extra compound_stmt
+func_def ::= T_id:id T_lpar T_rpar T_colon r_type func_def_extra compound_stmt {: RESULT = new Function(id); :}
+           | T_id:id T_lpar fpar_list:params T_rpar T_colon r_type func_def_extra compound_stmt {: RESULT = new Function(id,params); :}
            ;
 
 func_def_extra ::=
-                 | local_def func_def_extra
+                 | local_def func_def_extra {::}
                  ;
 
-fpar_list ::= fpar_def fpar_list_extra;
+fpar_list ::= fpar_def:param fpar_list_extra:param_list               {: RESULT = param_list.addFirst(param); :};
 
-fpar_list_extra ::=
-                  | T_comma fpar_def fpar_list_extra
+fpar_list_extra ::=                                                   {: RESULT = new LinkedList<Parameter>(); :}
+                  | T_comma fpar_def:param fpar_list_extra:param_list {: param_list.addLast(param); RESULT = param_list;:}
                   ;
 
-fpar_def ::= T_id T_colon type
-           | T_id T_colon T_reference type
+fpar_def ::= T_id:id T_colon type:t {: RESULT = new Parameter(id,t,false);:}
+           | T_id:id T_colon T_reference type:t {: RESULT = new Parameter(id,t,true);:}
            ;
 
-data_type ::= T_int
-            | T_byte
+data_type ::= T_int {: RESULT = BasicType.Int; :}
+            | T_byte {: RESULT = BasicType.Byte; :}
             ;
 
-type ::= data_type
-       | data_type T_lsquare T_rsquare
+type ::= data_type                                                    {::}
+       | data_type:t T_lsquare T_rsquare                              {: RESULT = new ArrayType(t); :}
        ;
 
 r_type ::= data_type
@@ -94,33 +95,33 @@ compound_stmt_extra ::=
                       | stmt compound_stmt_extra
                       ;
 
-func_call ::= T_id T_lpar T_rpar
-            | T_id T_lpar expr_list T_rpar
+func_call ::= T_id:id T_lpar T_rpar                                   {: RESULT = new FunctionCall(id);:}
+            | T_id:id T_lpar expr_list:params T_rpar                  {: RESULT = new FunctionCall(id,params);:}
             ;
 
-expr_list ::= expr expr_list_extra;
+expr_list ::= expr:e expr_list_extra:expr_list                        {: RESULT = expr_list.addFirst(e); :};
 
-expr_list_extra ::=
-                  | T_comma expr expr_list_extra
+expr_list_extra ::=                                                   {: RESULT = new LinkedList<Expression>(); :}
+                  | T_comma expr:e expr_list_extra:expr_list          {: expr_list.addLast(e); RESULT = expr_list;:}
                   ;
 
 expr ::= T_num:e
        | T_char_literal
-       | l_value:e {: RESULT = e;:}
-       | T_lpar expr:e T_rpar  {: RESULT = e;:}
+       | l_value:e                                                    {: RESULT = e;:}
+       | T_lpar expr:e T_rpar                                         {: RESULT = e;:}
        | func_call
        | T_plus expr
        | T_minus expr
-       | expr:le T_plus expr:re {: RESULT = new PlusOp(le,re); :}
-       | expr:le T_minus expr:re {: RESULT = new MinusOp(le,re); :}
-       | expr:le T_times expr:re {: RESULT = new TimesOp(le,re); :}
-       | expr:le T_div expr:re {: RESULT = new DivisionOp(le,re); :}
-       | expr:le T_modulo expr:re {: RESULT = new ModuloOp(le,re); :}
+       | expr:le T_plus expr:re                                       {: RESULT = new PlusOp(le,re); :}
+       | expr:le T_minus expr:re                                      {: RESULT = new MinusOp(le,re); :}
+       | expr:le T_times expr:re                                      {: RESULT = new TimesOp(le,re); :}
+       | expr:le T_div expr:re                                        {: RESULT = new DivisionOp(le,re); :}
+       | expr:le T_modulo expr:re                                     {: RESULT = new ModuloOp(le,re); :}
        ;
 
-l_value ::= T_string_literal
+l_value ::= T_string_literal:s                                        {: RESULT = new StringLiteral(s); :}
           | T_id T_lsquare expr T_rsquare
-          | T_id:id  {: RESULT = new Id(id); :}
+          | T_id:id                                                   {: RESULT = new Id(id); :}
           ;
 
 cond ::= expr T_deq expr
