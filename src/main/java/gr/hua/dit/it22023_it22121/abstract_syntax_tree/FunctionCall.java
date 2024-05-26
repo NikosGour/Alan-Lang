@@ -1,6 +1,7 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
 import java.util.Deque;
+import java.util.StringJoiner;
 
 public class FunctionCall extends Statement {
 	private String            name;
@@ -17,6 +18,14 @@ public class FunctionCall extends Statement {
 	
 	@Override
 	public String toString() {
-		return "";
+		if (call_params == null) {
+			return "call(" + this.name + ")";
+		}
+		
+		StringJoiner sj = new StringJoiner("," , "{" , "}");
+		for (Expression param : this.call_params) {
+			sj.add(param.toString());
+		}
+		return "call(" + this.name + ")" + sj.toString();
 	}
 }

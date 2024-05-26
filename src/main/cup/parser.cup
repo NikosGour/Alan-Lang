@@ -5,23 +5,23 @@ import java.util.*;
 terminal T_byte,T_else,T_false,T_if,T_int,T_proc,T_reference,T_return,T_while,T_true;
 terminal T_plus, T_minus, T_times, T_div, T_modulo, T_and, T_or, T_not, T_deq, T_eq, T_neq, T_less, T_greater, T_less_or_eq, T_greater_or_eq;
 terminal T_lpar, T_rpar,T_lsquare,T_rsquare,T_lsquigly,T_rsquigly,T_comma,T_colon,T_semicolon;
-terminal T_id;
+terminal String T_id;
 terminal Integer T_num;
 terminal String T_char_literal;
 terminal String T_string_literal;
 
 non terminal Program program;
-non terminal func_def;
+non terminal Function func_def;
 non terminal Deque<Parameter> fpar_list;
 non terminal Parameter fpar_def;
 non terminal BasicType data_type;
 non terminal Type type;
-non terminal r_type;
-non terminal local_def;
-non terminal var_def;
-non terminal stmt;
-non terminal compound_stmt;
-non terminal func_call;
+non terminal Type r_type;
+non terminal Definition local_def;
+non terminal Definition var_def;
+non terminal Statement stmt;
+non terminal Deque<Statement> compound_stmt;
+non terminal FunctionCall func_call;
 non terminal Deque<Expression> expr_list;
 non terminal Expression expr;
 non terminal Expression l_value;
@@ -29,8 +29,8 @@ non terminal cond;
 
 non terminal Deque<Parameter> fpar_list_extra;
 non terminal Deque<Expression> expr_list_extra;
-non terminal compound_stmt_extra;
-non terminal func_def_extra;
+non terminal Deque<Statement> compound_stmt_extra;
+non terminal Deque<Definition> func_def_extra;
 
 precedence left T_plus, T_minus;
 precedence left T_times, T_div, T_modulo;
@@ -38,50 +38,53 @@ precedence left T_and, T_or;
 
 start with program;
 
-program ::= func_def;
+program ::= func_def:func                                             {: List<Statement> stmts = new ArrayList<Statement>();
+                                                                         stmts.add(func);
+                                                                         RESULT = new Program(stmts);:};
 
-func_def ::= T_id:id T_lpar T_rpar T_colon r_type func_def_extra compound_stmt {: RESULT = new Function(id); :}
-           | T_id:id T_lpar fpar_list:params T_rpar T_colon r_type func_def_extra compound_stmt {: RESULT = new Function(id,params); :}
+func_def ::= T_id:id T_lpar T_rpar T_colon r_type:ret func_def_extra:defs compound_stmt:stmts {: RESULT = new Function(id,ret,defs,stmts); :}
+           | T_id:id T_lpar fpar_list:params T_rpar T_colon r_type:ret func_def_extra:defs compound_stmt:stmts {: RESULT = new Function(id,ret,defs,stmts,params); :}
            ;
 
-func_def_extra ::=
-                 | local_def func_def_extra {::}
+func_def_extra ::=                          {: RESULT = new LinkedList<Definition>();:}
+                 | local_def:def func_def_extra:list {:list.addLast(def); RESULT = list;:}
                  ;
 
-fpar_list ::= fpar_def:param fpar_list_extra:param_list               {: RESULT = param_list.addFirst(param); :};
+fpar_list ::= fpar_def:param fpar_list_extra:param_list               {: param_list.addFirst(param);
+	                                                                    RESULT = param_list;  :};
 
 fpar_list_extra ::=                                                   {: RESULT = new LinkedList<Parameter>(); :}
-                  | T_comma fpar_def:param fpar_list_extra:param_list {: param_list.addLast(param); RESULT = param_list;:}
+                  | T_comma fpar_def:param fpar_list_extra:param_list {: param_list.addFirst(param); RESULT = param_list;:}
                   ;
 
-fpar_def ::= T_id:id T_colon type:t {: RESULT = new Parameter(id,t,false);:}
-           | T_id:id T_colon T_reference type:t {: RESULT = new Parameter(id,t,true);:}
+fpar_def ::= T_id:id T_colon type:t                                   {: RESULT = new Parameter(id,t,false);:}
+           | T_id:id T_colon T_reference type:t                       {: RESULT = new Parameter(id,t,true);:}
            ;
 
-data_type ::= T_int {: RESULT = BasicType.Int; :}
-            | T_byte {: RESULT = BasicType.Byte; :}
+data_type ::= T_int                                                   {: RESULT = BasicType.Int; :}
+            | T_byte                                                  {: RESULT = BasicType.Byte; :}
             ;
 
-type ::= data_type                                                    {::}
+type ::= data_type:dt                                                 {: RESULT = dt; :}
        | data_type:t T_lsquare T_rsquare                              {: RESULT = new ArrayType(t); :}
        ;
 
-r_type ::= data_type
-         | T_proc
+r_type ::= data_type:dt                                               {: RESULT = dt; :}
+         | T_proc                                                     {: RESULT = BasicType.Proc; :}
          ;
 
-local_def ::= func_def
-            | var_def
+local_def ::= func_def:func                                           {: RESULT = func; :}
+            | var_def:var                                             {: RESULT = var; :}
             ;
 
-var_def ::= T_id T_colon data_type T_semicolon
-          | T_id T_colon data_type T_lsquare T_num T_rsquare T_semicolon
+var_def ::= T_id:id T_colon data_type:t T_semicolon                   {: RESULT = new IdDef(id,t); :}
+          | T_id:id T_colon data_type:t T_lsquare T_num:idx T_rsquare T_semicolon {: RESULT = new IdDef(id,new ArrayType(t,idx));:}
           ;
 
 stmt ::= T_semicolon
        | l_value T_eq expr T_semicolon
        | compound_stmt
-       | func_call T_semicolon
+       | func_call:func T_semicolon                                   {:RESULT = func;:}
        | T_if T_lpar cond T_rpar stmt
        | T_if T_lpar cond T_rpar stmt T_else stmt
        | T_while T_lpar cond T_rpar stmt
@@ -89,17 +92,18 @@ stmt ::= T_semicolon
        | T_return expr T_semicolon
        ;
 
-compound_stmt ::= T_lsquigly compound_stmt_extra T_rsquigly;
+compound_stmt ::= T_lsquigly compound_stmt_extra:e T_rsquigly         {: RESULT = e; :};
 
-compound_stmt_extra ::=
-                      | stmt compound_stmt_extra
+compound_stmt_extra ::=                                               {: RESULT = new LinkedList<Statement>(); :}
+                      | stmt:s compound_stmt_extra:list               {: list.addFirst(s); RESULT = list; :}
                       ;
 
 func_call ::= T_id:id T_lpar T_rpar                                   {: RESULT = new FunctionCall(id);:}
             | T_id:id T_lpar expr_list:params T_rpar                  {: RESULT = new FunctionCall(id,params);:}
             ;
 
-expr_list ::= expr:e expr_list_extra:expr_list                        {: RESULT = expr_list.addFirst(e); :};
+expr_list ::= expr:e expr_list_extra:expr_list                        {: expr_list.addFirst(e);
+                                                                        RESULT = expr_list; :};
 
 expr_list_extra ::=                                                   {: RESULT = new LinkedList<Expression>(); :}
                   | T_comma expr:e expr_list_extra:expr_list          {: expr_list.addLast(e); RESULT = expr_list;:}

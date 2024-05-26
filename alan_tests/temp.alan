@@ -1,6 +1,6 @@
  p1 () : proc
  p2 (n : int) : proc
- p3 (a : int, b : int, b : reference byte) : proc
+ p3 (a : int, b : int, b : reference byte,x:int,y:byte,z:int) : proc
  f1 (x : int) : int
  f2 (s : reference byte []) : int
  {}{}{}{}{}
