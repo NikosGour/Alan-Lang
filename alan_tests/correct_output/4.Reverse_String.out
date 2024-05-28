@@ -1,8 +1,0 @@
-Program(Func(main:PROC)params{}local_defs{IdDef(r:BYTE[32])
-Func(reverse:PROC)params{Param(s:BYTE[], refrence:yes)}local_defs{IdDef(i:INT)
-IdDef(l:INT)}{Assignment(id(l) = call(strlen){id(s)})
-Assignment(id(i) = 0)
-While(id(i) < id(l)){r[id(i)] = s[id(l)-id(i)-1]
-Assignment(id(i) = id(i)+1)}
-r[id(i)] = '\0'}}{call(reverse){"\n!dlrow olleH"}
-call(writeString){id(r)}})

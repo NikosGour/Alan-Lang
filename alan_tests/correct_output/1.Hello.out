@@ -1,1 +1,0 @@
-Program(Func(hello:PROC)params{}local_defs{}{call(writeString){"Hello world\n"}})
