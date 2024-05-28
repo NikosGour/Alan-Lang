@@ -3,7 +3,7 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 import java.util.Deque;
 import java.util.StringJoiner;
 
-public class FunctionCall extends Statement {
+public class FunctionCall extends Expression {
 	private String            name;
 	private Deque<Expression> call_params = null;
 	

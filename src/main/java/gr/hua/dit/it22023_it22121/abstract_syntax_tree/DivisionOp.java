@@ -7,6 +7,6 @@ public class DivisionOp extends BinOp {
 	
 	@Override
 	public String toString() {
-		return "(" + this.l + "/" + this.r + ")";
+		return this.l + "/" + this.r;
 	}
 }

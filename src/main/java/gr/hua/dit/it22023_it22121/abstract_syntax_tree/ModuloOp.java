@@ -7,6 +7,6 @@ public class ModuloOp extends BinOp {
 	
 	@Override
 	public String toString() {
-		return "(" + this.l + "%" + this.r + ")";
+		return this.l + "%" + this.r;
 	}
 }

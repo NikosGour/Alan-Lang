@@ -7,7 +7,7 @@ import java.io.*;
 
 public class Main {
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		Reader r = new InputStreamReader(System.in);
 		Lexer l = new Lexer(r);
 		Parser p = new Parser(l);
@@ -15,13 +15,8 @@ public class Main {
 		final boolean RUN_PARSER = true;
 		if (RUN_PARSER) {
 			
-			try {
-				Program result = (Program) p.parse().value;
-				System.out.println("Result = " + result);
-			}
-			catch (Exception e) {
-				System.err.println("Our Error: " + e.getMessage());
-			}
+			Program result = (Program) p.parse().value;
+			System.out.println(result);
 		}
 		else {
 			//		 Run Lexer

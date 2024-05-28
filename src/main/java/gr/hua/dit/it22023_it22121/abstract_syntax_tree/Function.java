@@ -1,7 +1,6 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
 import java.util.Deque;
-import java.util.List;
 import java.util.StringJoiner;
 
 
@@ -42,7 +41,6 @@ public class Function extends Definition {
 		StringJoiner params_sj = new StringJoiner("\n" , "params{" , "}");
 		if (this.parameters != null) {
 			for (Statement param : this.parameters) {
-				System.out.printf("Param = %s\n" , param.toString());
 				params_sj.add(param.toString());
 			}
 		}

@@ -25,7 +25,7 @@ non terminal FunctionCall func_call;
 non terminal Deque<Expression> expr_list;
 non terminal Expression expr;
 non terminal Expression l_value;
-non terminal cond;
+non terminal Condition cond;
 
 non terminal Deque<Parameter> fpar_list_extra;
 non terminal Deque<Expression> expr_list_extra;
@@ -35,6 +35,7 @@ non terminal Deque<Definition> func_def_extra;
 precedence left T_plus, T_minus;
 precedence left T_times, T_div, T_modulo;
 precedence left T_and, T_or;
+precedence right T_else;
 
 start with program;
 
@@ -47,7 +48,7 @@ func_def ::= T_id:id T_lpar T_rpar T_colon r_type:ret func_def_extra:defs compou
            ;
 
 func_def_extra ::=                          {: RESULT = new LinkedList<Definition>();:}
-                 | local_def:def func_def_extra:list {:list.addLast(def); RESULT = list;:}
+                 | local_def:def func_def_extra:list {:list.addFirst(def); RESULT = list;:}
                  ;
 
 fpar_list ::= fpar_def:param fpar_list_extra:param_list               {: param_list.addFirst(param);
@@ -82,14 +83,19 @@ var_def ::= T_id:id T_colon data_type:t T_semicolon                   {: RESULT 
           ;
 
 stmt ::= T_semicolon
-       | l_value T_eq expr T_semicolon
-       | compound_stmt
+       | l_value:id T_eq expr:e T_semicolon                      {: RESULT = new Assignment(id,e); :}
+       //| compound_stmt:e                                            //{: RESULT = e; :}
        | func_call:func T_semicolon                                   {:RESULT = func;:}
-       | T_if T_lpar cond T_rpar stmt
-       | T_if T_lpar cond T_rpar stmt T_else stmt
-       | T_while T_lpar cond T_rpar stmt
+       | T_if T_lpar cond:c T_rpar stmt:s                           {: RESULT = new If(c,s); :}
+       | T_if T_lpar cond:c T_rpar stmt:s T_else stmt:es             {: RESULT = new Else(c,s,es);:}
+       | T_if T_lpar cond:c T_rpar stmt:s T_else compound_stmt:es             {: RESULT = new Else(c,s,es);:}
+       | T_if T_lpar cond:c T_rpar compound_stmt:s                   {: RESULT = new If(c,s); :}
+       | T_if T_lpar cond:c T_rpar compound_stmt:s T_else stmt:es   {: RESULT = new Else(c,s,es);:}
+       | T_if T_lpar cond:c T_rpar compound_stmt:s T_else compound_stmt:es {: RESULT = new Else(c,s,es);:}
+       | T_while T_lpar cond:c T_rpar stmt:s                        {: RESULT = new While(c,s); :}
+       | T_while T_lpar cond:c T_rpar compound_stmt:s               {: RESULT = new While(c,s); :}
        | T_return T_semicolon
-       | T_return expr T_semicolon
+       | T_return expr:e T_semicolon                                {: RESULT = new Return(e); :}
        ;
 
 compound_stmt ::= T_lsquigly compound_stmt_extra:e T_rsquigly         {: RESULT = e; :};
@@ -106,16 +112,16 @@ expr_list ::= expr:e expr_list_extra:expr_list                        {: expr_li
                                                                         RESULT = expr_list; :};
 
 expr_list_extra ::=                                                   {: RESULT = new LinkedList<Expression>(); :}
-                  | T_comma expr:e expr_list_extra:expr_list          {: expr_list.addLast(e); RESULT = expr_list;:}
+                  | T_comma expr:e expr_list_extra:expr_list          {: expr_list.addFirst(e); RESULT = expr_list;:}
                   ;
 
-expr ::= T_num:e
-       | T_char_literal
+expr ::= T_num:e                                                {: RESULT = new Num(e); :}
+       | T_char_literal:e                                       {: RESULT = new CharLiteral(e); :}
        | l_value:e                                                    {: RESULT = e;:}
        | T_lpar expr:e T_rpar                                         {: RESULT = e;:}
-       | func_call
-       | T_plus expr
-       | T_minus expr
+       | func_call:e                                              {: RESULT = e;:}
+       | T_plus expr:e                                          {: RESULT = new PosSign(e);:}
+       | T_minus expr:e                                             {: RESULT = new NegSign(e); :}
        | expr:le T_plus expr:re                                       {: RESULT = new PlusOp(le,re); :}
        | expr:le T_minus expr:re                                      {: RESULT = new MinusOp(le,re); :}
        | expr:le T_times expr:re                                      {: RESULT = new TimesOp(le,re); :}
@@ -124,20 +130,20 @@ expr ::= T_num:e
        ;
 
 l_value ::= T_string_literal:s                                        {: RESULT = new StringLiteral(s); :}
-          | T_id T_lsquare expr T_rsquare
+          | T_id:id T_lsquare expr:e T_rsquare                        {: RESULT = new ArrayAccess(id,e); :}
           | T_id:id                                                   {: RESULT = new Id(id); :}
           ;
 
-cond ::= expr T_deq expr
-       | expr T_neq expr
-       | expr T_less expr
-       | expr T_greater expr
-       | expr T_less_or_eq expr
-       | expr T_greater_or_eq expr
-       | T_true
-       | T_false
-       | T_not cond
-       | cond T_and cond
-       | cond T_or cond
-       | T_lpar cond T_rpar
+cond ::= expr:l T_deq expr:r                                              {: RESULT = new BinCondition(l,r,BinCondition.DOUBLE_EQUAL); :}
+       | expr:l T_neq expr:r                                        {: RESULT = new BinCondition(l,r,BinCondition.NOT_EQUAL); :}
+       | expr:l T_less expr:r                        {: RESULT = new BinCondition(l,r,BinCondition.LESS); :}
+       | expr:l T_greater expr:r            {: RESULT = new BinCondition(l,r,BinCondition.GREATER); :}
+       | expr:l T_less_or_eq expr:r       {: RESULT = new BinCondition(l,r,BinCondition.LESS_OR_EQUAL); :}
+       | expr:l T_greater_or_eq expr:r  {: RESULT = new BinCondition(l,r,BinCondition.GREATER_OR_EQUAL); :}
+       | T_true                         {: RESULT = BooleanLiteral.TRUE; :}
+       | T_false                         {: RESULT = BooleanLiteral.FALSE; :}
+       | T_not cond:e                   {:RESULT = new UnaryCondition(e,UnaryCondition.NOT);:}
+       | cond:l T_and cond:r             {:RESULT = new BinCondition(l,r,BinCondition.AND);:}
+       | cond:l T_or cond:r             {:RESULT = new BinCondition(l,r,BinCondition.OR);:}
+       | T_lpar cond:e T_rpar           {:RESULT = e;:}
        ;

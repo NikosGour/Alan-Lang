@@ -15,35 +15,29 @@
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
 [INFO] --- clean:3.2.0:clean (default-clean) @ compiler ---
-[INFO] Deleting /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target
+[INFO] Deleting /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target
 [INFO] 
 [INFO] --- jflex:1.9.0:generate (default) @ compiler ---
-[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/generated-sources/jflex/gr/hua/dit/it22023_it22121/Lexer.java
+[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/generated-sources/jflex/gr/hua/dit/it22023_it22121/Lexer.java
 [INFO] 
 [INFO] --- cup:11b-20160615-2:generate (default) @ compiler ---
-Warning : *** Shift/Reduce conflict found in state #96
-  between stmt ::= T_if T_lpar cond T_rpar stmt (*) 
-  and     stmt ::= T_if T_lpar cond T_rpar stmt (*) T_else stmt 
-  under symbol T_else
-  Resolved in favor of shifting.
-
-[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/generated-sources/cup/gr/hua/dit/it22023_it22121/Parser.java
-[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/generated-sources/cup/gr/hua/dit/it22023_it22121/Symbols.java
+[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/generated-sources/cup/gr/hua/dit/it22023_it22121/Parser.java
+[INFO]   generated /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/generated-sources/cup/gr/hua/dit/it22023_it22121/Symbols.java
 [INFO] 
 [INFO] --- resources:3.3.1:resources (default-resources) @ compiler ---
 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-[INFO] skip non existing resourceDirectory /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/src/main/resources
+[INFO] skip non existing resourceDirectory /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/resources
 [INFO] 
 [INFO] --- compiler:3.8.1:compile (default-compile) @ compiler ---
 [INFO] Changes detected - recompiling the module!
 [WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[INFO] Compiling 4 source files to /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/classes
-[INFO] /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/src/main/java/gr/hua/dit/it22023_it22121/Main.java: /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/src/main/java/gr/hua/dit/it22023_it22121/Main.java uses or overrides a deprecated API.
-[INFO] /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/src/main/java/gr/hua/dit/it22023_it22121/Main.java: Recompile with -Xlint:deprecation for details.
+[INFO] Compiling 38 source files to /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/classes
+[INFO] /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/java/gr/hua/dit/it22023_it22121/Main.java: /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/java/gr/hua/dit/it22023_it22121/Main.java uses or overrides a deprecated API.
+[INFO] /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/main/java/gr/hua/dit/it22023_it22121/Main.java: Recompile with -Xlint:deprecation for details.
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ compiler ---
 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-[INFO] skip non existing resourceDirectory /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/src/test/resources
+[INFO] skip non existing resourceDirectory /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/src/test/resources
 [INFO] 
 [INFO] --- compiler:3.8.1:testCompile (default-testCompile) @ compiler ---
 [INFO] No sources to compile
@@ -52,15 +46,15 @@ Warning : *** Shift/Reduce conflict found in state #96
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- jar:3.3.0:jar (default-jar) @ compiler ---
-[INFO] Building jar: /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/compiler-0.0.2.jar
+[INFO] Building jar: /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/compiler-0.0.2.jar
 [INFO] 
 [INFO] --- shade:3.2.0:shade (default) @ compiler ---
 [INFO] Including com.github.vbmacher:java-cup-runtime:jar:11b-20160615-2 in the shaded jar.
 [INFO] Replacing original artifact with shaded artifact.
-[INFO] Replacing /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/compiler-0.0.2.jar with /mnt/c/Users/ngkil/IdeaProjects/compilers_assignment/target/compiler-0.0.2-shaded.jar
+[INFO] Replacing /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/compiler-0.0.2.jar with /mnt/c/Users/ngkil/IdeaProjects/Alan-Lang/target/compiler-0.0.2-shaded.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  3.544 s
-[INFO] Finished at: 2024-05-14T23:23:01+03:00
+[INFO] Total time:  6.622 s
+[INFO] Finished at: 2024-05-28T12:21:51+03:00
 [INFO] ------------------------------------------------------------------------
