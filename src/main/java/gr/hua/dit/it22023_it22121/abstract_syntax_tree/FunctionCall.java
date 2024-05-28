@@ -1,5 +1,7 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
+
 import java.util.Deque;
 import java.util.StringJoiner;
 

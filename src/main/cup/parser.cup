@@ -1,5 +1,12 @@
 import java_cup.runtime.Symbol;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.operation.*;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.*;
 import java.util.*;
 
 terminal T_byte,T_else,T_false,T_if,T_int,T_proc,T_reference,T_return,T_while,T_true;
