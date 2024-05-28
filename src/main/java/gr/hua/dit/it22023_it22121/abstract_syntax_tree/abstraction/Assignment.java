@@ -15,7 +15,7 @@ public class Assignment extends Statement {
 	public String toString(int depth) {
 		if (id instanceof ArrayAccess) {
 			ArrayAccess a = (ArrayAccess) id;
-			return a.getName() + "[" + a.getIndex() + "] = " + e.toString();
+			return a.getName() + "[" + a.getIndex().toString(depth) + "] = " + e.toString(depth);
 			
 		}
 		return "Assignment(" + id.toString(depth) + " = " + e.toString(depth) + ")";

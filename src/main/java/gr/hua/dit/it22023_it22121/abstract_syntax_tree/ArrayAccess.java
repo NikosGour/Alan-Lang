@@ -13,7 +13,7 @@ public class ArrayAccess extends Expression {
 	
 	@Override
 	public String toString(int depth) {
-		return this.name + "[" + this.index + "]";
+		return this.name + "[" + this.index.toString(depth) + "]";
 	}
 	
 	public String getName() {
