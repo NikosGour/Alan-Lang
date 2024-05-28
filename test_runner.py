@@ -9,7 +9,7 @@ import glob
 colorama_init(autoreset=True)
 LOGS_DIR = "logs"
 MVN_LOGFILE_PATH = os.path.join(LOGS_DIR, "mvn.logs")
-test_files = glob.glob("alan_examples/*")
+test_files = glob.glob("alan_tests/test_files/*")
 
 
 def log_info(msg):
@@ -106,8 +106,9 @@ def run_tests():
 
 if __name__ == "__main__":
     BUILD_TEST = False
-    if ("-B" in sys.argv):
+    if "-B" in sys.argv:
         BUILD_TEST = True
+
     if not os.path.exists(LOGS_DIR):
         os.makedirs(LOGS_DIR)
 
