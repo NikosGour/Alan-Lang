@@ -119,6 +119,7 @@ if __name__ == "__main__":
         lines = mvn_logfile.readlines()
         if "BUILD SUCCESS" in lines[-5]:
             log_info(f"{Fore.GREEN}{Style.BRIGHT}BUILD SUCCESS")
+            os.remove(MVN_LOGFILE_PATH)
         else:
             log_error(f"There was a problem with the Maven Build.")
             log_info(f"Exiting!")

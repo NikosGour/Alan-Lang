@@ -18,4 +18,8 @@ public class Parameter extends Definition {
 	public String toString(int depth) {
 		return "Param(" + this.name + ":" + this.type + ", refrence:" + (this.is_refrence ? "yes" : "no") + ")";
 	}
+	
+	public String getName() {
+		return name;
+	}
 }

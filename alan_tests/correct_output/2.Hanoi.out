@@ -1,14 +1,40 @@
-Program(Func(solve:PROC)params{}local_defs{Func(hanoi:PROC)params{Param(rings:INT, refrence:no)
-Param(source:BYTE[], refrence:yes)
-Param(target:BYTE[], refrence:yes)
-Param(auxiliary:BYTE[], refrence:yes)}local_defs{Func(move:PROC)params{Param(source:BYTE[], refrence:yes)
-Param(target:BYTE[], refrence:yes)}local_defs{}{call(writeString){"Moving from "}
-call(writeString){id(source)}
-call(writeString){" to "}
-call(writeString){id(target)}
-call(writeString){".\n"}}}{If(id(rings) >= 1){call(hanoi){id(rings)-1,id(source),id(auxiliary),id(target)}
-call(move){id(source),id(target)}
-call(hanoi){id(rings)-1,id(auxiliary),id(target),id(source)}}}
-IdDef(NumberOfRings:INT)}{call(writeString){"Rings: "}
-Assignment(id(NumberOfRings) = call(readInteger))
-call(hanoi){id(NumberOfRings),"left", "right", "middle"}})
+Program(
+Func(solve:PROC)
+params{}
+local_defs{
+    Func(hanoi:PROC)
+    params{
+        Param(rings:INT, refrence:no)
+        Param(source:BYTE[], refrence:yes)
+        Param(target:BYTE[], refrence:yes)
+        Param(auxiliary:BYTE[], refrence:yes)
+    }
+    local_defs{
+        Func(move:PROC)
+        params{
+            Param(source:BYTE[], refrence:yes)
+            Param(target:BYTE[], refrence:yes)
+        }
+        local_defs{}
+        move_body{
+            call(writeString,{"Moving from "})
+            call(writeString,{id(source)})
+            call(writeString,{" to "})
+            call(writeString,{id(target)})
+            call(writeString,{".\n"})
+        }
+    }
+    hanoi_body{
+        If(id(rings) >= 1){
+            call(hanoi,{id(rings)-1,id(source),id(auxiliary),id(target)})
+            call(move,{id(source),id(target)})
+            call(hanoi,{id(rings)-1,id(auxiliary),id(target),id(source)})
+        }
+    }
+    IdDef(NumberOfRings:INT)
+}
+solve_body{
+    call(writeString,{"Rings: "})
+    Assignment(id(NumberOfRings) = call(readInteger))
+    call(hanoi,{id(NumberOfRings),"left", "right", "middle"})
+})

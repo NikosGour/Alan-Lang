@@ -6,6 +6,8 @@ import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringJoiner;
 
 
@@ -25,6 +27,15 @@ public class Function extends Definition {
 	
 	public Function(String name , Type return_type , Deque<Definition> local_defs , Deque<Statement> statements ,
 	                Deque<Parameter> parameters) {
+		Set<String> params = new HashSet<>();
+		for (Parameter parameter : parameters) {
+			if (params.contains(parameter.getName())) {
+				throw new IllegalArgumentException(
+						String.format("Duplicate Parameter name: `%s`\non Function: `%s`" , parameter.getName() , name));
+			}
+			params.add(parameter.getName());
+		}
+		
 		this.name        = name;
 		this.return_type = return_type;
 		this.statements  = statements;

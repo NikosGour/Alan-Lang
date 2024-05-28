@@ -1,4 +1,4 @@
-main () : proc
+main (n:int,n:byte) : proc
 { -- main
     if(false) return 0;
 } -- main
