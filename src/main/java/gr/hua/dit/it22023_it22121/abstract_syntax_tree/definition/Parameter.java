@@ -15,7 +15,7 @@ public class Parameter extends Definition {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return "Param(" + this.name + ":" + this.type + ", refrence:" + (this.is_refrence ? "yes" : "no") + ")";
 	}
 }

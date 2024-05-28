@@ -10,7 +10,7 @@ public class Num extends Expression {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return Integer.toString(this.value);
 	}
 }

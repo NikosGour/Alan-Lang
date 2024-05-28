@@ -13,7 +13,7 @@ public class IdDef extends Definition {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return "IdDef(" + this.name + ":" + this.type + ")";
 	}
 }

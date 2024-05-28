@@ -12,12 +12,12 @@ public class Assignment extends Statement {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		if (id instanceof ArrayAccess) {
 			ArrayAccess a = (ArrayAccess) id;
 			return a.getName() + "[" + a.getIndex() + "] = " + e.toString();
 			
 		}
-		return "Assignment(" + id.toString() + " = " + e.toString() + ")";
+		return "Assignment(" + id.toString(depth) + " = " + e.toString(depth) + ")";
 	}
 }

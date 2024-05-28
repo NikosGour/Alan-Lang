@@ -10,7 +10,7 @@ public class StringLiteral extends Expression {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return "\"" + this.value + "\"";
 	}
 }

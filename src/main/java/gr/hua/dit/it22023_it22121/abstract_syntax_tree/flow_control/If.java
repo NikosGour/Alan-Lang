@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control;
 
+import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
 
@@ -22,17 +23,26 @@ public class If extends Statement {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		if (thens != null) {
 			
-			StringJoiner then_sj = new StringJoiner("\n" , "{" , "}");
-			for (Statement statement : thens) {
-				then_sj.add(statement.toString());
+			StringJoiner then_sj;
+			if (! thens.isEmpty()) {
+				then_sj = new StringJoiner("\n" , "{\n" , "\n" + Utils.indent(depth) + "}");
 			}
-			return "If(" + condition.toString() + ")" + then_sj.toString();
+			else {
+				then_sj = new StringJoiner("\n" , "{" , "}");
+			}
+			for (Statement statement : thens) {
+				then_sj.add(Utils.indent(depth + 1) + statement.toString(depth + 1));
+			}
+			return "If(" + condition.toString(depth) + ")" + then_sj.toString();
 		}
 		else {
-			return "If(" + condition.toString() + ")" + "{" + then.toString() + "}";
+			StringJoiner then_sj = new StringJoiner("\n" , "{\n" , "\n" + Utils.indent(depth) + "}");
+			then_sj.add(Utils.indent(depth + 1) + then.toString(depth + 1));
+			return "If(" + condition.toString(depth) + ")" + then_sj.toString();
+			
 		}
 		
 	}

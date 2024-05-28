@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control;
 
+import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
 
@@ -32,17 +33,19 @@ public class Else extends If {
 	}
 	
 	@Override
-	public String toString() {
-		String if_s = super.toString();
+	public String toString(int depth) {
+		String if_s = super.toString(depth);
 		if (elses != null) {
-			StringJoiner else_sj = new StringJoiner("\n" , "Else{" , "}");
+			StringJoiner else_sj = new StringJoiner("\n" , "Else{\n" , "\n" + Utils.indent(depth) + "}");
 			for (Statement statement : elses) {
-				else_sj.add(statement.toString());
+				else_sj.add(Utils.indent(depth + 1) + statement.toString(depth + 1));
 			}
-			return if_s + else_sj.toString();
+			return if_s + "\n" + Utils.indent(depth) + else_sj.toString();
 		}
 		else {
-			return if_s + "Else{" + elses_then.toString() + "}";
+			StringJoiner elses_then_sj = new StringJoiner("\n" , "Else{\n" , "\n" + Utils.indent(depth) + "}");
+			elses_then_sj.add(Utils.indent(depth + 1) + elses_then.toString(depth + 1));
+			return if_s + "\n" + Utils.indent(depth) + elses_then_sj.toString();
 		}
 	}
 }

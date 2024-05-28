@@ -10,7 +10,7 @@ public class PosSign extends Expression {
 	}
 	
 	@Override
-	public String toString() {
-		return "pos(" + this.expr.toString() + ")";
+	public String toString(int depth) {
+		return "pos(" + this.expr.toString(depth) + ")";
 	}
 }

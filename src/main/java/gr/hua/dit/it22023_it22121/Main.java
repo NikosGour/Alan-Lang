@@ -16,7 +16,7 @@ public class Main {
 		if (RUN_PARSER) {
 			
 			Program result = (Program) p.parse().value;
-			System.out.println(result);
+			System.out.println(result.toString(0));
 		}
 		else {
 			//		 Run Lexer

@@ -19,15 +19,15 @@ public class FunctionCall extends Expression {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		if (call_params == null) {
 			return "call(" + this.name + ")";
 		}
 		
 		StringJoiner sj = new StringJoiner("," , "{" , "}");
 		for (Expression param : this.call_params) {
-			sj.add(param.toString());
+			sj.add(param.toString(depth));
 		}
-		return "call(" + this.name + ")" + sj.toString();
+		return "call(" + this.name + "," + sj.toString() + ")";
 	}
 }

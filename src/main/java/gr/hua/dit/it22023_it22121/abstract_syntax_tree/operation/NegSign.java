@@ -10,7 +10,7 @@ public class NegSign extends Expression {
 	}
 	
 	@Override
-	public String toString() {
-		return "neg(" + this.expr.toString() + ")";
+	public String toString(int depth) {
+		return "neg(" + this.expr.toString(depth) + ")";
 	}
 }

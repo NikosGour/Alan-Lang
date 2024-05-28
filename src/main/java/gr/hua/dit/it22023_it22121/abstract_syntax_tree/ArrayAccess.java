@@ -12,7 +12,7 @@ public class ArrayAccess extends Expression {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return this.name + "[" + this.index + "]";
 	}
 	

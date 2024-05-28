@@ -10,7 +10,7 @@ public class Id extends Expression {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return "id(" + this.name + ")";
 	}
 }

@@ -30,7 +30,7 @@ public class UnaryCondition extends Condition {
 	}
 	
 	@Override
-	public String toString() {
-		return operand.toString() + " " + e.toString();
+	public String toString(int depth) {
+		return operand.toString() + " " + e.toString(depth);
 	}
 }

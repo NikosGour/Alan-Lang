@@ -9,14 +9,7 @@ public class BinCondition extends Condition {
 	private ConditionEnum operand;
 	
 	private enum ConditionEnum {
-		DOUBLE_EQUAL("=="),
-		NOT_EQUAL("!="),
-		LESS("<"),
-		GREATER(">"),
-		LESS_OR_EQUAL("<="),
-		GREATER_OR_EQUAL(">="),
-		AND("&"),
-		OR("|");
+		DOUBLE_EQUAL("=="), NOT_EQUAL("!="), LESS("<"), GREATER(">"), LESS_OR_EQUAL("<="), GREATER_OR_EQUAL(">="), AND("&"), OR("|");
 		
 		private final String s;
 		
@@ -47,7 +40,7 @@ public class BinCondition extends Condition {
 	}
 	
 	@Override
-	public String toString() {
-		return l.toString() + " " + operand.toString() + " " + r.toString();
+	public String toString(int depth) {
+		return l.toString(depth) + " " + operand.toString() + " " + r.toString(depth);
 	}
 }

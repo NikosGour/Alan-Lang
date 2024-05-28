@@ -1,0 +1,79 @@
+Program(Func(main:PROC)params{
+
+}local_defs{
+  
+Func(prime:INT)params{
+    
+
+}local_defs{
+    
+
+}{
+    
+If(gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.BinCondition@776ec8df){gr.hua.dit.it22023_it22121.abstract_syntax_tree.Return@4eec7777}
+}
+  
+
+  
+
+  
+
+}{
+  
+call(writeString){"Limit: "}
+  
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@404b9385 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.FunctionCall@6d311334)
+  
+call(writeString){"Primes:\n"}
+  
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@682a0b20 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@3d075dc0)
+  
+If(gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.BinCondition@7ba4f24f){
+    
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@214c265e = gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@448139f0+gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@7cca494b)
+    
+call(writeInteger){2}
+    
+call(writeString){"\n"}
+}
+  
+If(gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.BinCondition@4dd8dc3){
+    
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@3b9a45b3 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@7699a589+gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@58372a00)
+    
+call(writeInteger){3}
+    
+call(writeString){"\n"}
+}
+  
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@6d03e736 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@568db2f2)
+  
+While(gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.BinCondition@10f87f48){
+    
+If(gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.BinCondition@27d6c5e0){
+      
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@378bf509 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@5fd0d5ae+gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@2d98a335)
+      
+call(writeInteger){op(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@16b98e56,gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@7ef20235)}
+      
+call(writeString){"\n"}
+}
+    
+If(gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional.BinCondition@3feba861){
+      
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@4f3f5b24 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@15aeb7ab+gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@7b23ec81)
+      
+call(writeInteger){op(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@6acbcfc0,gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@5f184fc6)}
+      
+call(writeString){"\n"}
+}
+    
+Assignment(gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@5b480cf9 = gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id@6f496d9f+gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.Num@723279cf)
+}
+  
+call(writeString){"\nTotal:"}
+  
+call(writeInteger){id(counter)}
+  
+call(writeString){"\n"}
+})

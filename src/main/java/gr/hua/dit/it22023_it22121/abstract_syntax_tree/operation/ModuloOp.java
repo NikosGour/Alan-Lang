@@ -8,7 +8,7 @@ public class ModuloOp extends BinOp {
 	}
 	
 	@Override
-	public String toString() {
-		return this.l + "%" + this.r;
+	public String toString(int depth) {
+		return this.l.toString(depth) + "%" + this.r.toString(depth);
 	}
 }

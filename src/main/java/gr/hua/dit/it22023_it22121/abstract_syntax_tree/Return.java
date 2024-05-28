@@ -11,7 +11,7 @@ public class Return extends Statement {
 	}
 	
 	@Override
-	public String toString() {
-		return "return(" + this.expr.toString() + ")";
+	public String toString(int depth) {
+		return "return(" + this.expr.toString(depth) + ")";
 	}
 }

@@ -12,12 +12,11 @@ public class Program {
 		this.statements = statements;
 	}
 	
-	@Override
-	public String toString() {
+	public String toString(int depth) {
 		
-		StringJoiner sj = new StringJoiner("|" , "Program(" , ")");
+		StringJoiner sj = new StringJoiner("|" , "Program(\n" , ")");
 		for (Statement statement : this.statements) {
-			sj.add(statement.toString());
+			sj.add(statement.toString(depth));
 		}
 		return sj.toString();
 	}

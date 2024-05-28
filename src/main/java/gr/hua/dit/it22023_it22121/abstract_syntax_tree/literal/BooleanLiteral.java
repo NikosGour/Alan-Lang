@@ -17,7 +17,7 @@ public class BooleanLiteral extends Condition {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString(int depth) {
 		return this.value.toString();
 	}
 }
