@@ -17,6 +17,7 @@ public class Main {
 			
 			Program result = (Program) p.parse().value;
 			System.out.println(result.toString(0));
+			result.sem();
 		}
 		else {
 			//		 Run Lexer

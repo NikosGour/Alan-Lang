@@ -46,9 +46,7 @@ precedence right T_else;
 
 start with program;
 
-program ::= func_def:func                                             {: List<Statement> stmts = new ArrayList<Statement>();
-                                                                         stmts.add(func);
-                                                                         RESULT = new Program(stmts);:};
+program ::= func_def:func                                             {: RESULT = new Program(func);:};
 
 func_def ::= T_id:id T_lpar T_rpar T_colon r_type:ret func_def_extra:defs compound_stmt:stmts {: RESULT = new Function(id,ret,defs,stmts); :}
            | T_id:id T_lpar fpar_list:params T_rpar T_colon r_type:ret func_def_extra:defs compound_stmt:stmts {: RESULT = new Function(id,ret,defs,stmts,params); :}

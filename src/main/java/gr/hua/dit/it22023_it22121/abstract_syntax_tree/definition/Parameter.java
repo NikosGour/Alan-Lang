@@ -1,6 +1,7 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition;
 
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Definition;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 public class Parameter extends Definition {
@@ -19,7 +20,17 @@ public class Parameter extends Definition {
 		return "Param(" + this.name + ":" + this.type + ", refrence:" + (this.is_refrence ? "yes" : "no") + ")";
 	}
 	
+	@Override
+	public void sem(SymbolTable tbl) {
+		tbl.addEntry(this.name , this.type);
+		
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	public Type getType() {
+		return type;
 	}
 }

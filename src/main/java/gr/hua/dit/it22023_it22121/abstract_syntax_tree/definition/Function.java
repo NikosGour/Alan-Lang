@@ -3,12 +3,11 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition;
 import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Definition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 
 
 public class Function extends Definition {
@@ -90,5 +89,45 @@ public class Function extends Definition {
 		       "\n" +
 		       Utils.indent(depth) +
 		       statements_sj.toString();
+	}
+	
+	public void sem(SymbolTable tbl) {
+		if (this.parameters != null) {
+			for (Parameter parameter : this.parameters) {
+				parameter.sem(tbl);
+			}
+		}
+		for (Definition definition : this.local_defs) {
+			if (definition instanceof IdDef) {
+				definition.sem(tbl);
+			}
+			else if (definition instanceof Function) {
+				Function def = (Function) definition;
+				if (def.parameters != null) {
+					Deque<SymbolEntry> params = new LinkedList<>();
+					for (Parameter parameter : def.parameters) {
+						params.add(new SymbolEntry(parameter.getName() , parameter.getType()));
+					}
+					tbl.addFuncEntry(def.name , def.return_type , params);
+				}
+				else {
+					tbl.addFuncEntry(def.name , def.return_type , null);
+				}
+				tbl.openScope(def.name);
+				def.sem(tbl);
+				tbl.closeScope(def.name);
+				
+			}
+			else {
+				throw new IllegalArgumentException("You passed a non-handled definition");
+			}
+		}
+		//		for (Statement statement : this.statements) {
+		//			statement.sem(tbl);
+		//		}
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
