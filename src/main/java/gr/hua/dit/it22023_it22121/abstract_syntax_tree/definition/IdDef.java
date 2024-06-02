@@ -2,6 +2,7 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition;
 
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Definition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 public class IdDef extends Definition {
@@ -20,6 +21,12 @@ public class IdDef extends Definition {
 	
 	@Override
 	public void sem(SymbolTable tbl) {
+		if (this.type instanceof ArrayType) {
+			ArrayType at = (ArrayType) this.type;
+			tbl.addEntry(this.name , at.getType());
+			return;
+		}
+		
 		tbl.addEntry(this.name , this.type);
 		
 	}

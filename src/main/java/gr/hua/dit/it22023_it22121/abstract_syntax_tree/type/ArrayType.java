@@ -20,4 +20,8 @@ public class ArrayType extends Type {
 		}
 		return this.element_type + "[" + "]";
 	}
+	
+	public Type getType() {
+		return this.element_type;
+	}
 }

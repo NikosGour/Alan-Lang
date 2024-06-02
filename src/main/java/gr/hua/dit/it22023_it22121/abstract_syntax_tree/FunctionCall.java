@@ -48,18 +48,18 @@ public class FunctionCall extends Expression {
 			throw new IllegalArgumentException("Symbol `" + this.name + "` is not a function");
 		}
 		FuncSymbolEntry funcSymbolEntry = (FuncSymbolEntry) symbolEntry;
-		Deque<SymbolEntry> params = funcSymbolEntry.getParams();
+		Deque<SymbolEntry> symbol_entry_params = funcSymbolEntry.getParams();
 		
-		if (this.call_params != null && params == null) {
+		if (this.call_params != null && symbol_entry_params == null) {
 			throw new IllegalArgumentException("Function `" + this.name + "` does not accept any parameters");
 		}
 		
-		if (this.call_params == null && params != null) {
-			throw new IllegalArgumentException("Function `" + this.name + "` expects " + params.size() + " parameters");
+		if (this.call_params == null && symbol_entry_params != null) {
+			throw new IllegalArgumentException("Function `" + this.name + "` expects " + symbol_entry_params.size() + " parameters");
 		}
 		
 		if (this.call_params != null) {
-			if (this.call_params.size() != params.size()) {
+			if (this.call_params.size() != symbol_entry_params.size()) {
 				Deque<Expression> call_params = new LinkedList<>(this.call_params);
 				
 				StringJoiner sj = new StringJoiner("|" , "{" , "}");
@@ -70,7 +70,7 @@ public class FunctionCall extends Expression {
 				throw new IllegalArgumentException("Function `" +
 				                                   this.name +
 				                                   "` expects " +
-				                                   params.size() +
+				                                   symbol_entry_params.size() +
 				                                   " parameters, but got " +
 				                                   this.call_params.size() +
 				                                   " parameters:" +
@@ -80,11 +80,20 @@ public class FunctionCall extends Expression {
 			
 			int i = 0;
 			LinkedList<Expression> call_params = new LinkedList<>(this.call_params);
-			for (SymbolEntry param : params) {
+			for (SymbolEntry param : symbol_entry_params) {
 				Expression e = call_params.removeFirst();
+				e.sem(tbl);
 				if (! param.getType().equals(e.getType(tbl))) {
-					throw new IllegalArgumentException(
-							"Function `" + this.name + "` expects parameter " + i + " to be of type `" + param.getType() + "`");
+					throw new IllegalArgumentException("Function `" +
+					                                   this.name +
+					                                   "` expects parameter " +
+					                                   i +
+					                                   " to be of type `" +
+					                                   param.getType() +
+					                                   "` but got `" +
+					                                   e.getType(tbl) +
+					                                   "`. On call: " +
+					                                   this.toString(0));
 				}
 				i++;
 			}

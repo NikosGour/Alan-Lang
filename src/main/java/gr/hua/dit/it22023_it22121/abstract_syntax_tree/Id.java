@@ -32,6 +32,7 @@ public class Id extends Expression {
 		if (symbolEntry == null) {
 			throw new RuntimeException("Variable " + this.name + " not declared");
 		}
+		
 		return symbolEntry.getType();
 		
 	}

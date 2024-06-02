@@ -13,11 +13,12 @@ public class Main {
 		Parser p = new Parser(l);
 		
 		final boolean RUN_PARSER = true;
+		final boolean SEMANTIC_DEBUG = false;
 		if (RUN_PARSER) {
 			
 			Program result = (Program) p.parse().value;
 			System.out.println(result.toString(0));
-			result.sem();
+			result.sem(SEMANTIC_DEBUG);
 		}
 		else {
 			//		 Run Lexer

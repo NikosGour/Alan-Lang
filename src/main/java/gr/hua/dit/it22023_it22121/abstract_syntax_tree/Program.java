@@ -23,7 +23,7 @@ public class Program {
 		tbl.closeScope(main.getName());
 	}
 	
-	public void sem() {
-		this.sem(new SymbolTable(main.getName()));
+	public void sem(boolean debug) {
+		this.sem(new SymbolTable(main.getName() , debug));
 	}
 }
