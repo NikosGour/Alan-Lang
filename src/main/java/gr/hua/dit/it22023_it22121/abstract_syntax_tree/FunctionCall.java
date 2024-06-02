@@ -1,12 +1,16 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Parameter;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.FuncSymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.StringJoiner;
+import java.util.concurrent.DelayQueue;
 
 public class FunctionCall extends Expression {
 	private String            name;
@@ -40,7 +44,52 @@ public class FunctionCall extends Expression {
 		if (symbolEntry == null) {
 			throw new IllegalArgumentException("Function `" + this.name + "` not found");
 		}
-		Type return_type = symbolEntry.getType();
+		if (! (symbolEntry instanceof FuncSymbolEntry)) {
+			throw new IllegalArgumentException("Symbol `" + this.name + "` is not a function");
+		}
+		FuncSymbolEntry funcSymbolEntry = (FuncSymbolEntry) symbolEntry;
+		Deque<SymbolEntry> params = funcSymbolEntry.getParams();
+		
+		if (this.call_params != null && params == null) {
+			throw new IllegalArgumentException("Function `" + this.name + "` does not accept any parameters");
+		}
+		
+		if (this.call_params == null && params != null) {
+			throw new IllegalArgumentException("Function `" + this.name + "` expects " + params.size() + " parameters");
+		}
+		
+		if (this.call_params != null) {
+			if (this.call_params.size() != params.size()) {
+				Deque<Expression> call_params = new LinkedList<>(this.call_params);
+				
+				StringJoiner sj = new StringJoiner("|" , "{" , "}");
+				for (Expression param : call_params) {
+					sj.add(param.toString(0));
+				}
+				
+				throw new IllegalArgumentException("Function `" +
+				                                   this.name +
+				                                   "` expects " +
+				                                   params.size() +
+				                                   " parameters, but got " +
+				                                   this.call_params.size() +
+				                                   " parameters:" +
+				                                   sj.toString());
+			}
+			
+			
+			int i = 0;
+			LinkedList<Expression> call_params = new LinkedList<>(this.call_params);
+			for (SymbolEntry param : params) {
+				Expression e = call_params.removeFirst();
+				if (! param.getType().equals(e.getType(tbl))) {
+					throw new IllegalArgumentException(
+							"Function `" + this.name + "` expects parameter " + i + " to be of type `" + param.getType() + "`");
+				}
+				i++;
+			}
+		}
+		
 		
 		//		if (this.call_params != null) {
 		//			for (Expression param : this.call_params) {
@@ -48,5 +97,19 @@ public class FunctionCall extends Expression {
 		//			}
 		//		}
 		
+	}
+	
+	@Override
+	public Type getType(SymbolTable tbl) {
+		
+		SymbolEntry symbolEntry = tbl.lookupRec(this.name);
+		if (symbolEntry == null) {
+			throw new IllegalArgumentException("Function `" + this.name + "` not found");
+		}
+		if (! (symbolEntry instanceof FuncSymbolEntry)) {
+			throw new IllegalArgumentException("Symbol `" + this.name + "` is not a function");
+		}
+		FuncSymbolEntry funcSymbolEntry = (FuncSymbolEntry) symbolEntry;
+		return funcSymbolEntry.getType();
 	}
 }

@@ -18,6 +18,7 @@ import java.util.Stack;
 
 %{
     private Stack<Integer> comment_stack = new Stack<>();
+    private String string_buffer = "";
 
     private Symbol createSymbol(int type) {
         return new Symbol(type, yyline+1, yycolumn+1);
@@ -29,6 +30,7 @@ import java.util.Stack;
 %}
 
 %xstate COMMENT
+%xstate STRING
 
 end_of_line = \r|\n|\r\n
 delim       = [ \t\f] | {end_of_line}
@@ -91,10 +93,7 @@ Comment           = --.*
                                            return createSymbol(Symbols.T_char_literal, x.substring(1, x.length() - 1));
 	                                     }
 
-{String}                                 { String x = yytext();
-                                           //System.out.printf("Found string literal: `%s`\n",yytext());
-                                           return createSymbol(Symbols.T_string_literal, x.substring(1, x.length() - 1));
-	                                     }
+\"                                      { yybegin(STRING); }
 
 {Identifier}                             { return createSymbol(Symbols.T_id, yytext()); }
 {Number}                                 { return createSymbol(Symbols.T_num, Integer.valueOf(yytext())); }
@@ -119,4 +118,14 @@ Comment           = --.*
 										   //else {System.out.println("Found NOT FINAL closing comment");
 	                                     }
 [^]                          {}
+}
+
+<STRING>{
+\"                                      { String x = string_buffer;
+                                             string_buffer = "";
+                                            yybegin(YYINITIAL);
+                                           return createSymbol(Symbols.T_string_literal, x);}
+[^]                                     { string_buffer += yytext();
+                                           //System.out.printf("Found string literal: `%s`\n",yytext());
+                                           }
 }

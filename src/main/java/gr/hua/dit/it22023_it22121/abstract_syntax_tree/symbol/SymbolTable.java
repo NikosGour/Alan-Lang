@@ -1,6 +1,8 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol;
 
 import gr.hua.dit.it22023_it22121.Utils;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 import java.util.Deque;
@@ -17,6 +19,11 @@ public class SymbolTable {
 		
 		// enter the initial scope
 		openScope(name);
+		Deque<SymbolEntry> writeStringParams = new LinkedList<>();
+		writeStringParams.add(new SymbolEntry("str" , new ArrayType(BasicType.Byte)));
+		this.addFuncEntry("writeString" , BasicType.Proc , writeStringParams);
+		
+		this.addFuncEntry("readInteger" , BasicType.Int , null);
 	}
 	
 	public SymbolEntry lookup(String sym) {

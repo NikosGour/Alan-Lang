@@ -122,6 +122,9 @@ public class Function extends Definition {
 				throw new IllegalArgumentException("You passed a non-handled definition");
 			}
 		}
+		for (Statement statement : this.statements) {
+			statement.sem(tbl);
+		}
 		//		for (Statement statement : this.statements) {
 		//			statement.sem(tbl);
 		//		}

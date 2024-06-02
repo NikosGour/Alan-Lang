@@ -3,6 +3,8 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control;
 import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
 
 import java.util.Deque;
 import java.util.StringJoiner;
@@ -43,6 +45,26 @@ public class If extends Statement {
 			then_sj.add(Utils.indent(depth + 1) + then.toString(depth + 1));
 			return "If(" + condition.toString(depth) + ")" + then_sj.toString();
 			
+		}
+		
+	}
+	
+	@Override
+	public void sem(SymbolTable tbl) {
+		this.condition.sem(tbl);
+		if (! this.condition.getType(tbl).equals(BasicType.Byte)) {
+			throw new RuntimeException("Type mismatch in if condition, expected boolean, got `" +
+			                           this.condition.toString(0) +
+			                           "`: " +
+			                           this.condition.getType(tbl));
+		}
+		if (thens != null) {
+			for (Statement statement : thens) {
+				statement.sem(tbl);
+			}
+		}
+		else {
+			then.sem(tbl);
 		}
 		
 	}

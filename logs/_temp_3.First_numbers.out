@@ -1,0 +1,88 @@
+Program(
+Func(main:PROC)
+params{}
+local_defs{
+    Func(prime:INT)
+    params{
+        Param(n:INT, refrence:no)
+    }
+    local_defs{
+        IdDef(i:INT)
+    }
+    prime_body{
+        If(id(n) < 0){
+            return(call(prime,{neg(id(n))}))
+        }
+        Else{
+            If(id(n) < 2){
+                return(0)
+            }
+            Else{
+                If(id(n) == 2){
+                    return(1)
+                }
+                Else{
+                    If(id(n)%2 == 0){
+                        return(0)
+                    }
+                    Else{
+                        Assignment(id(i) = 3)
+                        While(id(i) <= id(n)/2){
+                            If(id(n)%id(i) == 0){
+                                return(0)
+                            }
+                            Assignment(id(i) = id(i)+2)
+                        }
+                        return(1)
+                    }
+                }
+            }
+        }
+    }
+    IdDef(limit:INT)
+    IdDef(number:INT)
+    IdDef(counter:INT)
+}
+main_body{
+    call(writeString,{"Limit: "})
+    Assignment(id(limit) = call(readInteger))
+    call(writeString,{"Primes:\n"})
+    Assignment(id(counter) = 0)
+    If(id(limit) >= 2){
+        Assignment(id(counter) = id(counter)+1)
+        call(writeInteger,{2})
+        call(writeString,{"\n"})
+    }
+    If(id(limit) >= 3){
+        Assignment(id(counter) = id(counter)+1)
+        call(writeInteger,{3})
+        call(writeString,{"\n"})
+    }
+    Assignment(id(number) = 6)
+    While(id(number) <= id(limit)){
+        If(call(prime,{id(number)-1}) == 1){
+            Assignment(id(counter) = id(counter)+1)
+            call(writeInteger,{id(number)-1})
+            call(writeString,{"\n"})
+        }
+        If(id(number) != id(limit) & call(prime,{id(number)+1}) == 1){
+            Assignment(id(counter) = id(counter)+1)
+            call(writeInteger,{id(number)+1})
+            call(writeString,{"\n"})
+        }
+        Assignment(id(number) = id(number)+6)
+    }
+    call(writeString,{"\nTotal:"})
+    call(writeInteger,{id(counter)})
+    call(writeString,{"\n"})
+})
+main:
+    { prime : INT , [ n:INT ] }
+    prime:
+        { n : INT }
+        { i : INT }
+    END prime
+    { limit : INT }
+    { number : INT }
+    { counter : INT }
+END main

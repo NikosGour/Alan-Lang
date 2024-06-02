@@ -2,11 +2,15 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree.conditional;
 
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 public class BinCondition extends Condition {
 	private Expression    l;
 	private Expression    r;
 	private ConditionEnum operand;
+	
 	
 	private enum ConditionEnum {
 		DOUBLE_EQUAL("=="), NOT_EQUAL("!="), LESS("<"), GREATER(">"), LESS_OR_EQUAL("<="), GREATER_OR_EQUAL(">="), AND("&"), OR("|");
@@ -42,5 +46,28 @@ public class BinCondition extends Condition {
 	@Override
 	public String toString(int depth) {
 		return l.toString(depth) + " " + operand.toString() + " " + r.toString(depth);
+	}
+	
+	@Override
+	public void sem(SymbolTable tbl) {
+		this.l.sem(tbl);
+		this.r.sem(tbl);
+		if (! l.getType(tbl).equals(r.getType(tbl))) {
+			throw new RuntimeException("Type mismatch in binary condition, left `" +
+			                           l.toString(0) +
+			                           "`: " +
+			                           l.getType(tbl) +
+			                           " and right `" +
+			                           r.toString(0) +
+			                           "`: " +
+			                           r.getType(tbl));
+			
+		}
+		
+	}
+	
+	@Override
+	public Type getType(SymbolTable tbl) {
+		return BasicType.Byte;
 	}
 }

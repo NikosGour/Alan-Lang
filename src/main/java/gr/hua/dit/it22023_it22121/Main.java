@@ -25,7 +25,7 @@ public class Main {
 			while (! l.yyatEOF()) {
 				try {
 					Symbol next = l.next_token();
-					System.out.printf("Token = %s\n" , next);
+					System.out.printf("Token = %s, Value:`%s`\n" , next , next.value);
 					prev = next;
 				}
 				catch (Error e) {
