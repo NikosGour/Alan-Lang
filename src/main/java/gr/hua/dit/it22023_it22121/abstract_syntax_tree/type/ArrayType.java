@@ -22,6 +22,10 @@ public class ArrayType extends Type {
 	}
 	
 	public Type getType() {
+		return new ArrayType(this.element_type);
+	}
+	
+	public BasicType getElementType() {
 		return this.element_type;
 	}
 }

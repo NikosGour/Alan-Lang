@@ -4,6 +4,7 @@ import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
 
 public class ArrayAccess extends Expression {
 	private String     name;
@@ -32,13 +33,20 @@ public class ArrayAccess extends Expression {
 		return index;
 	}
 	
-	@Override
-	public Type getType(SymbolTable tbl) {
+	public Type getType(SymbolTable tbl , boolean get_element_type) {
 		SymbolEntry symbolEntry = tbl.lookupRec(this.name);
 		if (symbolEntry == null) {
 			throw new RuntimeException("Variable " + this.name + " not declared");
 		}
+		if (get_element_type) {
+			return ((ArrayType) symbolEntry.getType()).getElementType();
+		}
 		return symbolEntry.getType();
 		
+	}
+	
+	@Override
+	public Type getType(SymbolTable tbl) {
+		return this.getType(tbl , false);
 	}
 }
