@@ -10,6 +10,7 @@ colorama_init(autoreset=True)
 LOGS_DIR = "logs"
 MVN_LOGFILE_PATH = os.path.join(LOGS_DIR, "mvn.logs")
 test_files = glob.glob("alan_tests/test_files/*")
+FLAGS = "--typecheck-debug"
 
 
 def log_info(msg):
@@ -38,10 +39,10 @@ def prerun_tests():
     log_info(f"Running pre_test")
 
     for test in test_files:
-        CMD: str = f"java -jar target/compiler-0.0.2.jar"
+        CMD: str = f"java -jar target/compiler-0.0.2.jar {test} {FLAGS}"
         stdin = test
         stdout = os.path.join("alan_tests", "correct_output", f"{get_filename_without_extension(test)}.out")
-        _cmd_str = f"{CMD} < {test} > {stdout}"
+        _cmd_str = f"{CMD} {test} {FLAGS}> {stdout}"
         log_info(f"Running command: `{_cmd_str}`")
         with open(stdin, "r") as stdin_handle, open(stdout, "w") as stdout_handle:
             subprocess.run(CMD.split(), stdin=stdin_handle, stdout=stdout_handle)
@@ -64,10 +65,10 @@ def run_tests():
         corresponding_out_file_path = correct_out_files_map.get(test_title)
         log_info(f"--- {Fore.BLUE}{Style.BRIGHT}Checking test{Style.RESET_ALL}: `{test_title}` ---")
 
-        CMD: str = f"java -jar target/compiler-0.0.2.jar"
+        CMD: str = f"java -jar target/compiler-0.0.2.jar {test} {FLAGS}"
         stdin = test
         stdout = os.path.join(LOGS_DIR, f"_temp_{test_title}.out")
-        _cmd_str = f"{CMD} < {test} > {stdout}"
+        _cmd_str = f"{CMD} {test} {FLAGS}> {stdout}"
         log_info(f"Running command: `{_cmd_str}`")
         with open(stdin, "r") as stdin_handle, open(stdout, "w") as stdout_handle, open(stderr, "w") as stderr_handle:
             subprocess.run(CMD.split(), stdin=stdin_handle, stdout=stdout_handle, stderr=stderr_handle)

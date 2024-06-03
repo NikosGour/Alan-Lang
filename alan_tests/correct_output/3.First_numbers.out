@@ -76,3 +76,18 @@ main_body{
     call(writeInteger,{id(counter)})
     call(writeString,{"\n"})
 })
+ --- TYPE CHECKING  ---
+main:
+    { writeString : PROC , [ str:BYTE[] ] }
+    { readInteger : INT }
+    { writeInteger : PROC , [ int:INT ] }
+    { strlen : INT , [ str:BYTE[] ] }
+    { prime : INT , [ n:INT ] }
+    prime:
+        { n : INT }
+        { i : INT }
+    END prime
+    { limit : INT }
+    { number : INT }
+    { counter : INT }
+END main

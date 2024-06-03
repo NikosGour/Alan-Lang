@@ -38,3 +38,23 @@ solve_body{
     Assignment(id(NumberOfRings) = call(readInteger))
     call(hanoi,{id(NumberOfRings),"left","right","middle"})
 })
+ --- TYPE CHECKING  ---
+solve:
+    { writeString : PROC , [ str:BYTE[] ] }
+    { readInteger : INT }
+    { writeInteger : PROC , [ int:INT ] }
+    { strlen : INT , [ str:BYTE[] ] }
+    { hanoi : PROC , [ rings:INT , source:BYTE[] , target:BYTE[] , auxiliary:BYTE[] ] }
+    hanoi:
+        { rings : INT }
+        { source : BYTE[] }
+        { target : BYTE[] }
+        { auxiliary : BYTE[] }
+        { move : PROC , [ source:BYTE[] , target:BYTE[] ] }
+        move:
+            { source : BYTE[] }
+            { target : BYTE[] }
+        END move
+    END hanoi
+    { NumberOfRings : INT }
+END solve

@@ -5,3 +5,10 @@ local_defs{}
 hello_body{
     call(writeString,{"Hello world\n"})
 })
+ --- TYPE CHECKING  ---
+hello:
+    { writeString : PROC , [ str:BYTE[] ] }
+    { readInteger : INT }
+    { writeInteger : PROC , [ int:INT ] }
+    { strlen : INT , [ str:BYTE[] ] }
+END hello
