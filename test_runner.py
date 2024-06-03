@@ -93,8 +93,11 @@ def run_tests():
                 else:
                     failing_tests += 1
                     log_error(f"Files don't match")
-                    log_error(f"Correct output content: `{correct_output_content}`")
-                    log_error(f"Test output content: `{test_output_content}`")
+                    DIFF = f"diff --color=always {tmp_out_path} {corresponding_out_file_path}"
+                    log_error(f"Diff command: `{DIFF}`")
+                    os.system(DIFF)
+                    # log_error(f"Correct output content: `{correct_output_content}`")
+                    # log_error(f"Test output content: `{test_output_content}`")
             else:
                 failing_tests += 1
                 log_error(f"{Fore.RED}{Style.BRIGHT}Couldn't parse file{Style.RESET_ALL}: `{test}`")
