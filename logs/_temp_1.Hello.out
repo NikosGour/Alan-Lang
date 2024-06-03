@@ -1,9 +1,0 @@
-Program(
-Func(hello:PROC)
-params{}
-local_defs{}
-hello_body{
-    call(writeString,{"Hello world\n"})
-})
-hello:
-END hello

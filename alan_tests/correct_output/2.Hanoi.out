@@ -36,5 +36,5 @@ local_defs{
 solve_body{
     call(writeString,{"Rings: "})
     Assignment(id(NumberOfRings) = call(readInteger))
-    call(hanoi,{id(NumberOfRings),"left", "right", "middle"})
+    call(hanoi,{id(NumberOfRings),"left","right","middle"})
 })

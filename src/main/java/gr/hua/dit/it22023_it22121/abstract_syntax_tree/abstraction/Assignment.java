@@ -19,8 +19,8 @@ public class Assignment extends Statement {
 	@Override
 	public String toString(int depth) {
 		if (id instanceof ArrayAccess) {
-			ArrayAccess a = (ArrayAccess) id;
-			return a.getName() + "[" + a.getIndex().toString(depth) + "] = " + e.toString(depth);
+			ArrayAccess id_array = (ArrayAccess) id;
+			return id_array.getName() + "[" + id_array.getIndex().toString(depth) + "] = " + e.toString(depth);
 			
 		}
 		return "Assignment(" + id.toString(depth) + " = " + e.toString(depth) + ")";
@@ -30,14 +30,22 @@ public class Assignment extends Statement {
 	public void sem(SymbolTable tbl) {
 		if (this.id instanceof Id) {
 			
-			System.out.printf("Found id %s\n" , this.id.toString(0));
 			Id id = (Id) this.id;
 			SymbolEntry symbolEntry = tbl.lookupRec(id.getName());
 			if (symbolEntry == null) {
 				throw new RuntimeException("Variable " + id.getName() + " not declared");
 			}
 			this.e.sem(tbl);
-			if (! symbolEntry.getType().equals(this.e.getType(tbl))) {
+			
+			Type eType;
+			if (this.e instanceof ArrayAccess) {
+				ArrayAccess e = (ArrayAccess) this.e;
+				eType = e.getType(tbl , true);
+			}
+			else {
+				eType = this.e.getType(tbl);
+			}
+			if (! symbolEntry.getType().equals(eType)) {
 				throw new RuntimeException("Type mismatch in " +
 				                           this.toString(0) +
 				                           ", left `" +
@@ -47,32 +55,25 @@ public class Assignment extends Statement {
 				                           " and right `" +
 				                           this.e.toString(0) +
 				                           "`: " +
-				                           this.e.getType(tbl));
+				                           eType);
 			}
 		}
 		else {
-			ArrayAccess a = (ArrayAccess) this.id;
-			System.out.printf("Found array access %s\n" , a.toString(0));
-			SymbolEntry symbolEntry = tbl.lookupRec(a.getName());
+			ArrayAccess id_array = (ArrayAccess) this.id;
+			SymbolEntry symbolEntry = tbl.lookupRec(id_array.getName());
 			Type elementType = ((ArrayType) symbolEntry.getType()).getElementType();
 			this.e.sem(tbl);
 			
+			Type eType;
 			if (this.e instanceof ArrayAccess) {
 				ArrayAccess e = (ArrayAccess) this.e;
-				if (! elementType.equals(e.getType(tbl , true))) {
-					throw new RuntimeException("Type mismatch in " +
-					                           this.toString(0) +
-					                           ", left `" +
-					                           this.id.toString(0) +
-					                           "`: " +
-					                           elementType +
-					                           " and right `" +
-					                           e.toString(0) +
-					                           "`: " +
-					                           e.getType(tbl , true));
-				}
+				eType = e.getType(tbl , true);
 			}
-			else if (! elementType.equals(this.e.getType(tbl))) {
+			else {
+				eType = this.e.getType(tbl);
+			}
+			
+			if (! elementType.equals(eType)) {
 				throw new RuntimeException("Type mismatch in " +
 				                           this.toString(0) +
 				                           ", left `" +
@@ -82,7 +83,7 @@ public class Assignment extends Statement {
 				                           " and right `" +
 				                           this.e.toString(0) +
 				                           "`: " +
-				                           this.e.getType(tbl));
+				                           eType);
 			}
 			
 		}

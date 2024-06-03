@@ -29,7 +29,7 @@ local_defs{
         While(id(changed) == 'y'){
             Assignment(id(changed) = 'n')
             Assignment(id(i) = 0)
-            While(id(i) < id(n1)){
+            While(id(i) < id(n)-1){
                 If(x[id(i)] > x[id(i)+1]){
                     call(swap,{x[id(i)],x[id(i)+1]})
                     Assignment(id(changed) = 'y')

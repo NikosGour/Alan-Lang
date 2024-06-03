@@ -20,7 +20,12 @@ public class SymbolTable {
 		SymbolTable.debug = debug;
 		
 		// enter the initial scope
+		if (debug) {
+			System.out.println(" --- TYPE CHECKING  ---");
+		}
 		openScope(name);
+		
+		// Built-in functions
 		Deque<SymbolEntry> writeStringParams = new LinkedList<>();
 		writeStringParams.add(new SymbolEntry("str" , new ArrayType(BasicType.Byte)));
 		this.addFuncEntry("writeString" , BasicType.Proc , writeStringParams);

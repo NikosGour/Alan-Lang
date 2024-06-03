@@ -83,7 +83,16 @@ public class FunctionCall extends Expression {
 			for (SymbolEntry param : symbol_entry_params) {
 				Expression e = call_params.removeFirst();
 				e.sem(tbl);
-				if (! param.getType().equals(e.getType(tbl))) {
+				
+				Type eType;
+				if (e instanceof ArrayAccess) {
+					ArrayAccess arrayAccess = (ArrayAccess) e;
+					eType = arrayAccess.getType(tbl , true);
+				}
+				else {
+					eType = e.getType(tbl);
+				}
+				if (! param.getType().equals(eType)) {
 					throw new IllegalArgumentException("Function `" +
 					                                   this.name +
 					                                   "` expects parameter " +
@@ -91,7 +100,7 @@ public class FunctionCall extends Expression {
 					                                   " to be of type `" +
 					                                   param.getType() +
 					                                   "` but got `" +
-					                                   e.getType(tbl) +
+					                                   eType +
 					                                   "`. On call: " +
 					                                   this.toString(0));
 				}

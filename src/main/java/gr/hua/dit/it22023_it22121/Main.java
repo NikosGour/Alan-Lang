@@ -13,7 +13,7 @@ public class Main {
 		Parser p = new Parser(l);
 		
 		final boolean RUN_PARSER = true;
-		final boolean SEMANTIC_DEBUG = true;
+		final boolean SEMANTIC_DEBUG = false;
 		if (RUN_PARSER) {
 			
 			Program result = (Program) p.parse().value;
