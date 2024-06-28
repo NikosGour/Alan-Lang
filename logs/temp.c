@@ -1,21 +1,8 @@
 #include <stdio.h>
+#include <unistd.h>
 int main()
 {
-	void bsort(int n, int *x)
-	{
-		void swap(int *x, int *y)
-		{
-			int t;
-			printf("Swapping x=%d and y=%d\n", *x, *y);
-		}
-
-		unsigned char changed;
-		int i;
-		printf("Swapping n=%d and x=%d\n", n, *x);
-		swap(&n, x);
-	}
-
-	int a = 5;
-	bsort(1, &a);
+	char *x = "peos";
+	write(STDOUT_FILENO, x, 4);
 	return 0;
 }
