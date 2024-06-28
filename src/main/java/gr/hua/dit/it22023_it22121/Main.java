@@ -4,8 +4,11 @@ import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Program;
 import java_cup.runtime.Symbol;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Main {
 	
@@ -34,7 +37,8 @@ public class Main {
 			}
 		}
 		
-		InputStream file = Files.newInputStream(Paths.get(args[0]));
+		Path file_name_with_path = Paths.get(args[0]);
+		InputStream file = Files.newInputStream(file_name_with_path);
 		Reader reader = new InputStreamReader(file);
 		Lexer lexer = new Lexer(reader);
 		Parser parser = new Parser(lexer);
@@ -44,6 +48,17 @@ public class Main {
 			Program result = (Program) parser.parse().value;
 			System.out.println(result.toString(0));
 			result.sem(SEMANTIC_DEBUG);
+			
+			Path file_name = file_name_with_path.getFileName();
+			String file_name_no_ext = file_name.toString().substring(0 , file_name.toString().lastIndexOf('.'));
+			Path output_file = Paths.get("logs" , file_name_no_ext + ".c");
+			StringBuilder output = new StringBuilder("#include <stdio.h>\nint main() {\n");
+			result.gen(output);
+			output.append(Utils.indent(1));
+			output.append("return 0;\n}");
+			
+			Files.deleteIfExists(output_file);
+			Files.write(output_file , Arrays.asList(output.toString()) , StandardCharsets.UTF_8 , StandardOpenOption.CREATE);
 		}
 		else {
 			//		 Run Lexer

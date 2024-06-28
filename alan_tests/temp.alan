@@ -1,27 +1,28 @@
-solve () : proc
-    hanoi (rings : int, source : reference byte [], target : reference byte [], auxiliary : reference byte [],pes :int) : proc
+bsort (n : int, x : reference int []) : proc
 
-        move (source : reference byte [], target : reference byte[]) : proc
-        {
-            writeString("Moving from ");
-            writeString(source);
-            writeString(" to ");
-            writeString(target);
-            writeString(".\n");
+    swap (x : reference int, y : reference int) : proc
+        t : int;
+    {
+        t = x;
+        x = y;
+        y = t;
+    }
+
+    changed : byte;
+
+    i : int;
+
+{ -- bsort
+    changed = 'y';
+    while (changed == 'y') {
+        changed = 'n';
+        i = 0;
+        while (i < n-1) {
+            if (x[i] > x[i+1]) {
+                swap(x[i], x[i+1]);
+                changed = 'y';
+            }
+            i = i + 1;
         }
-
-    { -- hanoi
-        if (rings >= 1) {
-            hanoi(rings-1, source, auxiliary, target,rings);
-            move(source, target);
-            hanoi(rings-1, auxiliary, target, source,rings);
-        }
-    } -- hanoi
-
-    NumberOfRings : int;
-
-{ -- solve
-    writeString("Rings: ");
-    NumberOfRings = readInteger();
-    hanoi(NumberOfRings, "left", "right", "middle",NumberOfRings);
-} -- solve
+    }
+} -- bsort

@@ -30,4 +30,12 @@ public class IdDef extends Definition {
 		tbl.addEntry(this.name , this.type);
 		
 	}
+	
+	public Type getType() {
+		return type;
+	}
+	
+	public String getName() {
+		return name;
+	}
 }

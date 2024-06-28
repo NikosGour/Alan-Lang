@@ -33,4 +33,8 @@ public class Parameter extends Definition {
 	public Type getType() {
 		return type;
 	}
+	
+	public Boolean is_refrence() {
+		return is_refrence;
+	}
 }

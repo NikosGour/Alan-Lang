@@ -28,4 +28,8 @@ public class ArrayType extends Type {
 	public BasicType getElementType() {
 		return this.element_type;
 	}
+	
+	public Integer getSize() {
+		return size;
+	}
 }

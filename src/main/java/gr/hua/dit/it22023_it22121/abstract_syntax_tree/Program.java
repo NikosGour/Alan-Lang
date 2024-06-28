@@ -26,4 +26,8 @@ public class Program {
 	public void sem(boolean debug) {
 		this.sem(new SymbolTable(main.getName() , debug));
 	}
+	
+	public void gen(StringBuilder sb) {
+		this.main.gen(sb , 1);
+	}
 }

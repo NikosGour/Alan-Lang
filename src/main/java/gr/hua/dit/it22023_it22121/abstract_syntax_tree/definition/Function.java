@@ -5,6 +5,8 @@ import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Definition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
 import java.util.*;
@@ -130,7 +132,92 @@ public class Function extends Definition {
 		//		}
 	}
 	
+	public void gen(StringBuilder sb , int depth) {
+		StringBuilder params_sb = new StringBuilder();
+		if (this.parameters != null) {
+			for (Parameter parameter : this.parameters) {
+				Type param_type = parameter.getType();
+				if (param_type instanceof ArrayType) {
+					param_type = ((ArrayType) param_type).getElementType();
+				}
+				
+				params_sb.append(map_alan_to_c_type(param_type.toString()) + " ");
+				
+				if (parameter.is_refrence()) {
+					params_sb.append("*");
+				}
+				params_sb.append(parameter.getName());
+				
+				params_sb.append(", ");
+			}
+			params_sb.delete(params_sb.length() - 2 , params_sb.length());
+		}
+		
+		String return_type_c = map_alan_to_c_type(this.return_type.toString());
+		sb.append(Utils.indent(depth));
+		if (this.name.equals("main")) {
+			sb.append(String.format("%s _main(%s){\n" , return_type_c , params_sb));
+		}
+		else {
+			sb.append(String.format("%s %s(%s){\n" , return_type_c , this.name , params_sb));
+		}
+		
+		StringBuilder local_defs_sb = new StringBuilder();
+		if (this.local_defs != null) {
+			for (Definition local_def : this.local_defs) {
+				local_defs_sb.append(Utils.indent(depth + 1));
+				
+				if (local_def instanceof Function) {
+					((Function) local_def).gen(sb , depth + 1);
+				}
+				else if (local_def instanceof IdDef) {
+					IdDef local_def_as_IdDef = (IdDef) local_def;
+					Type local_def_type = local_def_as_IdDef.getType();
+					if (local_def_type instanceof BasicType) {
+						local_defs_sb.append(map_alan_to_c_type(local_def_type.toString()) + " " + local_def_as_IdDef.getName() + ";");
+					}
+					else if (local_def_type instanceof ArrayType) {
+						ArrayType local_def_as_ArrayType = (ArrayType) local_def_type;
+						String array_type = map_alan_to_c_type(local_def_as_ArrayType.getElementType().toString());
+						local_defs_sb.append(
+								String.format("%s %s[%d];" , array_type , local_def_as_IdDef.getName() , local_def_as_ArrayType.getSize()));
+					}
+					else {
+						throw new IllegalStateException();
+					}
+				}
+				else {
+					throw new IllegalStateException();
+				}
+				local_defs_sb.append("\n");
+			}
+		}
+		
+		
+		sb.append(local_defs_sb);
+		sb.append(Utils.indent(depth));
+		sb.append("}\n");
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	private String map_alan_to_c_type(String alan_type) {
+		String return_type_c = "";
+		switch (alan_type) {
+			case "INT":
+				return_type_c = "int";
+				break;
+			case "BYTE":
+				return_type_c = "unsigned char";
+				break;
+			case "PROC":
+				return_type_c = "void";
+				break;
+			default:
+				throw new IllegalStateException("Type is BasicType but not any of the allowed");
+		}
+		return return_type_c;
 	}
 }
