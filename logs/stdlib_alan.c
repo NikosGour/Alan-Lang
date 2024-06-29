@@ -2,29 +2,28 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 
-int strlen(const unsigned char *s) {
-    const unsigned char *ptr = s;
-    while (*ptr != '\0') {
-        ptr++;
-    }
-    return ptr - s;
-}
-int strcmp(const unsigned char *s1, const unsigned char *s2) {
-    while (*s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-    }
-    return *(unsigned char *)s1 - *(unsigned char *)s2;
-}
-void strcpy(unsigned char *trg, const unsigned char *src) {
-    while ((*trg++ = *src++) != '\0');
+int readInteger() {
+    char buffer[12]; // Buffer to store input string
+    int length = syscall(SYS_read, STDIN_FILENO, buffer, sizeof(buffer) - 1);
+    buffer[length] = '\0'; // Null-terminate the string
+    return atoi(buffer); // Convert string to integer
 }
 
-void strcat(unsigned char *trg, const unsigned char *src) {
-    while (*trg) {
-        trg++;
-    }
-    while ((*trg++ = *src++) != '\0');
+unsigned char readByte() {
+    unsigned char b;
+    syscall(SYS_read, STDIN_FILENO, &b, 1);
+    return b;
+}
+
+unsigned char readChar() {
+    unsigned char c;
+    syscall(SYS_read, STDIN_FILENO, &c, 1);
+    return c;
+}
+
+void readString(int n, unsigned char *s) {
+    int length = syscall(SYS_read, STDIN_FILENO, s, n-1);
+    s[length] = '\0'; // Null-terminate the string
 }
 void writeInteger(int n) {
     char buffer[12];
@@ -42,10 +41,4 @@ void writeChar(unsigned char c) {
 
 void writeString(unsigned char *s) {
     syscall(SYS_write, STDOUT_FILENO, s, strlen((const char *)s)); // strlen is not a syscall
-}
-
-int main()
-{
-	printf("Hello, World!\n");
-	return 0;
 }
