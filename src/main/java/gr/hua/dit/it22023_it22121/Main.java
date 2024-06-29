@@ -52,7 +52,7 @@ public class Main {
 			Path file_name = file_name_with_path.getFileName();
 			String file_name_no_ext = file_name.toString().substring(0 , file_name.toString().lastIndexOf('.'));
 			Path output_file = Paths.get("logs" , file_name_no_ext + ".c");
-			StringBuilder output = new StringBuilder("#include <stdio.h>\nint main() {\n");
+			StringBuilder output = new StringBuilder("#include <stdio.h>\n#include<string.h>\n#include\"stdlib_alan.h\"\nint main() {\n");
 			result.gen(output);
 			output.append(Utils.indent(1));
 			output.append("return 0;\n}");

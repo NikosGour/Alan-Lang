@@ -26,7 +26,6 @@ public class Return extends Statement {
 	
 	@Override
 	public void gen(StringBuilder sb , int depth) {
-		sb.append(Utils.indent(depth));
 		sb.append("return ");
 		this.expr.gen(sb , depth);
 		sb.append(";\n");

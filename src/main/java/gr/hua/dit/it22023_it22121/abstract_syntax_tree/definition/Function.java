@@ -1,8 +1,11 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition;
 
 import gr.hua.dit.it22023_it22121.Utils;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Return;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Definition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control.If;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control.While;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
@@ -163,12 +166,13 @@ public class Function extends Definition {
 		}
 		
 		StringBuilder local_defs_sb = new StringBuilder();
+		StringBuilder func_defs_sb = new StringBuilder();
 		if (this.local_defs != null) {
 			for (Definition local_def : this.local_defs) {
 				local_defs_sb.append(Utils.indent(depth + 1));
 				
 				if (local_def instanceof Function) {
-					((Function) local_def).gen(sb , depth + 1);
+					((Function) local_def).gen(func_defs_sb , depth + 1);
 				}
 				else if (local_def instanceof IdDef) {
 					IdDef local_def_as_IdDef = (IdDef) local_def;
@@ -193,12 +197,17 @@ public class Function extends Definition {
 			}
 		}
 		sb.append(local_defs_sb);
+		sb.append(func_defs_sb);
 		
 		if (this.statements != null) {
 			for (Statement statement : this.statements) {
 				sb.append(Utils.indent(depth + 1));
 				statement.gen(sb , depth + 1);
-				sb.append("\n");
+				if (statement instanceof IdDef || statement instanceof If || statement instanceof While || statement instanceof Return) {
+				}
+				else {
+					sb.append(";\n");
+				}
 			}
 		}
 		sb.append(Utils.indent(depth));

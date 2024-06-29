@@ -1,10 +1,13 @@
-#include <stdio.h>
+#include "stdlib_alan.h"
+
 int main() {
     void _main(){
+        unsigned char r[32];
+        
         void reverse(unsigned char *s){
             int i;
             int l;
-            l = strlen(s);
+            l = strlen(s);;
             i = 0;
             while (i < l) {
                 r[i] = s[l - i - 1];
@@ -13,10 +16,9 @@ int main() {
 
             r[i] = '\0';
         }
-        unsigned char r[32];
-        
-        reverse("\n!dlrow olleH")
-        writeString(r)
+        reverse("\n!dlrow olleH");
+        writeString(r);
     }
+    _main();
     return 0;
 }

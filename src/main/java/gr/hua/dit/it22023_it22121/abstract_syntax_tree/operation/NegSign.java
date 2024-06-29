@@ -29,7 +29,7 @@ public class NegSign extends Expression {
 	
 	@Override
 	public void gen(StringBuilder sb , int depth) {
-		sb.append(" - ");
+		sb.append(" -");
 		this.expr.gen(sb , depth);
 	}
 	

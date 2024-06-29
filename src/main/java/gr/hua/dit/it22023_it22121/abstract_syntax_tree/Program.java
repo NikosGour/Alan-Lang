@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
+import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Function;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
@@ -29,5 +30,12 @@ public class Program {
 	
 	public void gen(StringBuilder sb) {
 		this.main.gen(sb , 1);
+		sb.append(Utils.indent(1));
+		if (this.main.getName().equals("main")) {
+			sb.append("_main();\n");
+		}
+		else {
+			sb.append(this.main.getName() + "();\n");
+		}
 	}
 }

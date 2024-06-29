@@ -79,13 +79,15 @@ public class If extends Statement {
 			for (Statement statement : thens) {
 				sb.append(Utils.indent(depth + 1));
 				statement.gen(sb , depth + 1);
-				sb.append("\n");
+				sb.append(";\n");
 			}
 			sb.append(Utils.indent(depth));
 			sb.append("}\n");
 		}
 		else {
+			sb.append(" ");
 			then.gen(sb , depth + 1);
+			sb.append(";\n");
 		}
 	}
 }

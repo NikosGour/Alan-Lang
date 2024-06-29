@@ -105,7 +105,6 @@ public class Assignment extends Statement {
 		}
 		sb.append(" = ");
 		e.gen(sb , depth);
-		sb.append(";");
 		
 	}
 }

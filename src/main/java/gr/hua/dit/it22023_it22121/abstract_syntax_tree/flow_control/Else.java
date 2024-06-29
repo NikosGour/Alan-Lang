@@ -53,12 +53,18 @@ public class Else extends If {
 	public void gen(StringBuilder sb , int depth) {
 		super.gen(sb , depth);
 		if (elses != null) {
+			sb.append(Utils.indent(depth) + "else{\n");
 			for (Statement statement : elses) {
+				sb.append(Utils.indent(depth + 1));
 				statement.gen(sb , depth + 1);
+				sb.append(";\n");
 			}
+			sb.append(Utils.indent(depth) + "}\n");
 		}
 		else {
+			sb.append(Utils.indent(depth) + "else ");
 			elses_then.gen(sb , depth + 1);
+			sb.append(";\n");
 		}
 	}
 }
