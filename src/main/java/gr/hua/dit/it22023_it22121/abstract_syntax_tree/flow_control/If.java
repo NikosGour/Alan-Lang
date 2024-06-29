@@ -68,4 +68,24 @@ public class If extends Statement {
 		}
 		
 	}
+	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append("if (");
+		this.condition.gen(sb , depth);
+		sb.append(") ");
+		if (thens != null) {
+			sb.append("{\n");
+			for (Statement statement : thens) {
+				sb.append(Utils.indent(depth + 1));
+				statement.gen(sb , depth + 1);
+				sb.append("\n");
+			}
+			sb.append(Utils.indent(depth));
+			sb.append("}\n");
+		}
+		else {
+			then.gen(sb , depth + 1);
+		}
+	}
 }

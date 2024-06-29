@@ -28,6 +28,12 @@ public class NegSign extends Expression {
 	}
 	
 	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(" - ");
+		this.expr.gen(sb , depth);
+	}
+	
+	@Override
 	public Type getType(SymbolTable tbl) {
 		return this.expr.getType(tbl);
 	}

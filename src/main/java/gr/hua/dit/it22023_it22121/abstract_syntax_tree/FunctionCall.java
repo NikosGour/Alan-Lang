@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
+import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Parameter;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.FuncSymbolEntry;
@@ -115,6 +116,23 @@ public class FunctionCall extends Expression {
 		//			}
 		//		}
 		
+	}
+	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(this.name);
+		sb.append("(");
+		if (this.call_params != null) {
+			boolean first = true;
+			for (Expression param : this.call_params) {
+				if (! first) {
+					sb.append(",");
+				}
+				param.gen(sb , depth);
+				first = false;
+			}
+		}
+		sb.append(")");
 	}
 	
 	@Override

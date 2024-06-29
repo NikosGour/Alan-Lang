@@ -34,6 +34,13 @@ public class MinusOp extends BinOp {
 	}
 	
 	@Override
+	public void gen(StringBuilder sb , int depth) {
+		this.l.gen(sb , depth);
+		sb.append(" - ");
+		this.r.gen(sb , depth);
+	}
+	
+	@Override
 	public Type getType(SymbolTable tbl) {
 		
 		return this.l.getType(tbl);

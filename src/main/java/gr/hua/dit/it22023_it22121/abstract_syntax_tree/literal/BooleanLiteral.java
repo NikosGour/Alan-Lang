@@ -31,6 +31,11 @@ public class BooleanLiteral extends Condition {
 	}
 	
 	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(this.value.toString().toLowerCase());
+	}
+	
+	@Override
 	public Type getType(SymbolTable tbl) {
 		return BasicType.Byte;
 	}

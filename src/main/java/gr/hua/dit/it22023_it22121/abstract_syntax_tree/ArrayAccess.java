@@ -25,6 +25,15 @@ public class ArrayAccess extends Expression {
 	
 	}
 	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(this.name);
+		sb.append("[");
+		this.index.gen(sb , depth);
+		sb.append("]");
+		
+	}
+	
 	public String getName() {
 		return name;
 	}

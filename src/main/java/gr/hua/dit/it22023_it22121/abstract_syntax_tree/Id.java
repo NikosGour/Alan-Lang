@@ -22,6 +22,11 @@ public class Id extends Expression {
 	
 	}
 	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(this.name);
+	}
+	
 	public String getName() {
 		return name;
 	}

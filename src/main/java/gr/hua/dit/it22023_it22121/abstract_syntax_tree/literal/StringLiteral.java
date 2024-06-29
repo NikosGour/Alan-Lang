@@ -24,6 +24,11 @@ public class StringLiteral extends Expression {
 	}
 	
 	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append("\"" + this.value + "\"");
+	}
+	
+	@Override
 	public Type getType(SymbolTable tbl) {
 		return new ArrayType(BasicType.Byte);
 	}

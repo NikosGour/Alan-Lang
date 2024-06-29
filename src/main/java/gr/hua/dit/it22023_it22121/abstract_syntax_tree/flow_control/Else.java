@@ -48,4 +48,17 @@ public class Else extends If {
 			return if_s + "\n" + Utils.indent(depth) + elses_then_sj.toString();
 		}
 	}
+	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		super.gen(sb , depth);
+		if (elses != null) {
+			for (Statement statement : elses) {
+				statement.gen(sb , depth + 1);
+			}
+		}
+		else {
+			elses_then.gen(sb , depth + 1);
+		}
+	}
 }

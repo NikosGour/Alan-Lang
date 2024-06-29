@@ -63,4 +63,24 @@ public class While extends Statement {
 			this.then.sem(tbl);
 		}
 	}
+	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append("while (");
+		this.condition.gen(sb , depth);
+		sb.append(") ");
+		if (thens != null) {
+			sb.append("{\n");
+			for (Statement statement : thens) {
+				sb.append(Utils.indent(depth + 1));
+				statement.gen(sb , depth + 1);
+				sb.append("\n");
+			}
+			sb.append(Utils.indent(depth) + "}\n");
+		}
+		else {
+			this.then.gen(sb , depth + 1);
+		}
+		
+	}
 }

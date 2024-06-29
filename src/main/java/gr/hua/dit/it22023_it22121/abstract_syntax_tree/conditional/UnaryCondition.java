@@ -49,6 +49,13 @@ public class UnaryCondition extends Condition {
 	}
 	
 	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(operand.toString() + " ");
+		e.gen(sb , depth);
+		
+	}
+	
+	@Override
 	public Type getType(SymbolTable tbl) {
 		return BasicType.Byte;
 	}

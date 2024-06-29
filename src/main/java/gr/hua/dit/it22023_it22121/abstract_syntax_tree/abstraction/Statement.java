@@ -7,4 +7,6 @@ public abstract class Statement extends AbstractSyntaxTree {
 	
 	public abstract void sem(SymbolTable tbl);
 	
+	public abstract void gen(StringBuilder sb , int depth);
+	
 }
