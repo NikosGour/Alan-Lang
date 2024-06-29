@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include"stdlib_alan.h"
+#include "stdlib_alan.h"
 int main() {
     void _main(){
         
@@ -26,23 +25,19 @@ int main() {
                         swap(x[i],x[i + 1]);
                         changed = 'y';
                     }
-
                     i = i + 1;
                 }
-
             }
-
         }
         void writeArray(unsigned char *msg, int n, int *x){
             int i;
             writeString(msg);
             i = 0;
             while (i < n) {
-                if (i > 0) writeString(",");
+                if (i > 0)  writeString(",");
                 writeInteger(x[i]);
                 i = i + 1;
             }
-
             writeString("\n");
         }
         seed = 65;
@@ -52,7 +47,6 @@ int main() {
             x[i] = seed;
             i = i + 1;
         }
-
         writeArray("Initial array:",16,x);
         bsort(16,x);
         writeArray("Sorted array:",16,x);

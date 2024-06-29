@@ -1,8 +1,10 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.flow_control;
 
 import gr.hua.dit.it22023_it22121.Utils;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Return;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.IdDef;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
 
@@ -74,12 +76,18 @@ public class While extends Statement {
 			for (Statement statement : thens) {
 				sb.append(Utils.indent(depth + 1));
 				statement.gen(sb , depth + 1);
-				sb.append("\n");
+				if (statement instanceof IdDef || statement instanceof If || statement instanceof While || statement instanceof Return) {
+				}
+				else {
+					sb.append(";\n");
+				}
 			}
 			sb.append(Utils.indent(depth) + "}\n");
 		}
 		else {
+			sb.append(" ");
 			this.then.gen(sb , depth + 1);
+			sb.append(";\n");
 		}
 		
 	}

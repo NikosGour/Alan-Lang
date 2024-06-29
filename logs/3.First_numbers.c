@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include<string.h>
-#include"stdlib_alan.h"
+#include "stdlib_alan.h"
 int main() {
     void _main(){
         
@@ -10,28 +8,17 @@ int main() {
         int prime(int n){
             int i;
             if (n < 0)  return prime( -n);
-;
             else if (n < 2)  return 0;
-;
                 else if (n == 2)  return 1;
-;
                     else if (n % 2 == 0)  return 0;
-;
                         else{
                             i = 3;
                             while (i <= n / 2) {
                                 if (n % i == 0)  return 0;
-;
-
-                                i = i + 2
+                                i = i + 2;
                             }
-;
                             return 1;
-;
                         }
-;
-;
-;
         }
         writeString("Limit: ");
         limit = readInteger();
@@ -54,14 +41,12 @@ int main() {
                 writeInteger(number - 1);
                 writeString("\n");
             }
-
             if (number != limit && prime(number + 1) == 1) {
                 counter = counter + 1;
                 writeInteger(number + 1);
                 writeString("\n");
             }
-
-            number = number + 6
+            number = number + 6;
         }
         writeString("\nTotal:");
         writeInteger(counter);

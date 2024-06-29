@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include"stdlib_alan.h"
+#include "stdlib_alan.h"
 int main() {
     void solve(){
         
@@ -18,10 +17,9 @@ int main() {
                 move(source,target);
                 hanoi(rings - 1,auxiliary,target,source);
             }
-
         }
         writeString("Rings: ");
-        NumberOfRings = readInteger();;
+        NumberOfRings = readInteger();
         hanoi(NumberOfRings,"left","right","middle");
     }
     solve();

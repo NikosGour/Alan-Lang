@@ -218,6 +218,14 @@ public class Function extends Definition {
 		return name;
 	}
 	
+	public Type getReturn_type() {
+		return return_type;
+	}
+	
+	public Deque<Parameter> getParameters() {
+		return parameters;
+	}
+	
 	private String map_alan_to_c_type(String alan_type) {
 		String return_type_c = "";
 		switch (alan_type) {
