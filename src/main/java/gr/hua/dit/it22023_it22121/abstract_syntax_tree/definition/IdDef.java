@@ -31,6 +31,11 @@ public class IdDef extends Definition {
 		
 	}
 	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		throw new IllegalStateException("IdDef can't be a statement");
+	}
+	
 	public Type getType() {
 		return type;
 	}

@@ -1,5 +1,6 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction;
 
+import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.ArrayAccess;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
@@ -87,6 +88,24 @@ public class Assignment extends Statement {
 			}
 			
 		}
+		
+	}
+	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		if (id instanceof ArrayAccess) {
+			ArrayAccess id_array = (ArrayAccess) id;
+			sb.append(id_array.getName());
+			sb.append("[");
+			id_array.getIndex().gen(sb , depth);
+			sb.append("]");
+		}
+		else {
+			sb.append(((Id) id).getName());
+		}
+		sb.append(" = ");
+		e.gen(sb , depth);
+		sb.append(";");
 		
 	}
 }

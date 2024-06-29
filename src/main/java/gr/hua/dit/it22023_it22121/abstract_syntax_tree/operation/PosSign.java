@@ -19,17 +19,18 @@ public class PosSign extends Expression {
 	
 	@Override
 	public void sem(SymbolTable tbl) {
-		if (! this.expr.getType(tbl).equals(BasicType.Int))
-		{
-			throw new RuntimeException("Type mismatch in " +
-			                           this.toString(0) +
-			                           ", expected `" +
-			                           BasicType.Int +
-			                           "` but got `" +
-			                           this.expr.getType(tbl) +
-			                           "`");
-		
+		if (! this.expr.getType(tbl).equals(BasicType.Int)) {
+			throw new RuntimeException(
+					"Type mismatch in " + this.toString(0) + ", expected `" + BasicType.Int + "` but got `" + this.expr.getType(tbl) + "`");
+			
 		}
+	}
+	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		sb.append(" + ");
+		this.expr.gen(sb , depth);
+		
 	}
 	
 	@Override

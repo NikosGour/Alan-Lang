@@ -67,6 +67,22 @@ public class BinCondition extends Condition {
 	}
 	
 	@Override
+	public void gen(StringBuilder sb , int depth) {
+		
+		this.l.gen(sb , depth);
+		if (this.operand == ConditionEnum.AND) {
+			sb.append(" && ");
+		}
+		else if (this.operand == ConditionEnum.OR) {
+			sb.append(" || ");
+		}
+		else {
+			sb.append(" " + this.operand.toString() + " ");
+		}
+		this.r.gen(sb , depth);
+	}
+	
+	@Override
 	public Type getType(SymbolTable tbl) {
 		return BasicType.Byte;
 	}

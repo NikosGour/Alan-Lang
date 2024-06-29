@@ -192,9 +192,15 @@ public class Function extends Definition {
 				local_defs_sb.append("\n");
 			}
 		}
-		
-		
 		sb.append(local_defs_sb);
+		
+		if (this.statements != null) {
+			for (Statement statement : this.statements) {
+				sb.append(Utils.indent(depth + 1));
+				statement.gen(sb , depth + 1);
+				sb.append("\n");
+			}
+		}
 		sb.append(Utils.indent(depth));
 		sb.append("}\n");
 	}

@@ -26,6 +26,12 @@ public class Parameter extends Definition {
 		
 	}
 	
+	@Override
+	public void gen(StringBuilder sb , int depth) {
+		throw new IllegalStateException("Parameter can't be a statement");
+		
+	}
+	
 	public String getName() {
 		return name;
 	}
