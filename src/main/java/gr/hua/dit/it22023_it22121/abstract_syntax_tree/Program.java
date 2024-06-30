@@ -39,7 +39,7 @@ public class Program {
 	}
 	
 	public void gen(StringBuilder sb) {
-		SymbolTable tbl = new SymbolTable(main.getName() , true);
+		SymbolTable tbl = new SymbolTable(main.getName() , false);
 		Deque<Parameter> params = null;
 		if (this.main.getParameters() != null) {
 			params = new LinkedList<>(this.main.getParameters());

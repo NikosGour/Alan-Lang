@@ -14,7 +14,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		
-		boolean RUN_PARSER = true;
+		boolean COMPILE = true;
 		boolean SEMANTIC_DEBUG = false;
 		
 		if (args.length < 1) {
@@ -25,7 +25,7 @@ public class Main {
 		if (args.length > 1) {
 			
 			if (args[1].equals("--lexer-only")) {
-				RUN_PARSER = false;
+				COMPILE = false;
 			}
 			else if (args[1].equals("--typecheck-debug")) {
 				SEMANTIC_DEBUG = true;
@@ -43,7 +43,7 @@ public class Main {
 		Lexer lexer = new Lexer(reader);
 		Parser parser = new Parser(lexer);
 		
-		if (RUN_PARSER) {
+		if (COMPILE) {
 			
 			Program result = (Program) parser.parse().value;
 			System.out.println(result.toString(0));
@@ -51,14 +51,35 @@ public class Main {
 			
 			Path file_name = file_name_with_path.getFileName();
 			String file_name_no_ext = file_name.toString().substring(0 , file_name.toString().lastIndexOf('.'));
-			Path output_file = Paths.get("logs" , file_name_no_ext + ".c");
+			Path output_file_c = Paths.get("alan_code_gen" , "tmp" , file_name_no_ext + ".c");
 			StringBuilder output = new StringBuilder("#include \"stdlib_alan.h\"\nint main() {\n");
 			result.gen(output);
 			output.append(Utils.indent(1));
 			output.append("return 0;\n}");
 			
-			Files.deleteIfExists(output_file);
-			Files.write(output_file , Arrays.asList(output.toString()) , StandardCharsets.UTF_8 , StandardOpenOption.CREATE);
+			Files.deleteIfExists(output_file_c);
+			Files.write(output_file_c , Arrays.asList(output.toString()) , StandardCharsets.UTF_8 , StandardOpenOption.CREATE);
+			
+			String os = System.getProperty("os.name");
+			if (! os.startsWith("Linux")) {
+				System.out.println("Only Linux is supported for compilation");
+				System.exit(1);
+			}
+			
+			Path output_executable = Paths.get("alan_code_gen" , "bin" , file_name_no_ext);
+			ProcessBuilder pb = new ProcessBuilder("gcc" , "-o" , output_executable.toString() , output_file_c.toString());
+			pb.inheritIO();
+			Process p = pb.start();
+			p.waitFor();
+			
+			if (p.exitValue() != 0) {
+				System.out.println("Compilation failed");
+				System.exit(1);
+			}
+			
+			System.out.println("Compilation successful, executable is at " + output_executable);
+			Files.deleteIfExists(output_file_c);
+			
 		}
 		else {
 			//		 Run Lexer

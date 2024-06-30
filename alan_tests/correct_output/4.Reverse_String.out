@@ -26,16 +26,19 @@ main_body{
     call(writeString,{id(r)})
 })
  --- TYPE CHECKING  ---
-main:
-    { writeString : PROC , [ str:BYTE[] ] }
+Global:
+    { writeString : PROC , [ s:BYTE[] refrence:true ] }
     { readInteger : INT }
-    { writeInteger : PROC , [ int:INT ] }
-    { strlen : INT , [ str:BYTE[] ] }
-    { r : BYTE[] }
-    { reverse : PROC , [ s:BYTE[] ] }
-    reverse:
-        { s : BYTE[] }
-        { i : INT }
-        { l : INT }
-    END reverse
-END main
+    { writeInteger : PROC , [ n:INT refrence:false ] }
+    { strlen : INT , [ s:BYTE[] refrence:true ] }
+    main:
+        { main : PROC }
+        { r : BYTE[] }
+        { reverse : PROC , [ s:BYTE[] refrence:true ] }
+        reverse:
+            { s : BYTE[] , refrence : true }
+            { i : INT }
+            { l : INT }
+        END reverse
+    END main
+END Global

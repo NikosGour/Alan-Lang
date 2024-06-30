@@ -6,9 +6,12 @@ hello_body{
     call(writeString,{"Hello world\n"})
 })
  --- TYPE CHECKING  ---
-hello:
-    { writeString : PROC , [ str:BYTE[] ] }
+Global:
+    { writeString : PROC , [ s:BYTE[] refrence:true ] }
     { readInteger : INT }
-    { writeInteger : PROC , [ int:INT ] }
-    { strlen : INT , [ str:BYTE[] ] }
-END hello
+    { writeInteger : PROC , [ n:INT refrence:false ] }
+    { strlen : INT , [ s:BYTE[] refrence:true ] }
+    hello:
+        { hello : PROC }
+    END hello
+END Global

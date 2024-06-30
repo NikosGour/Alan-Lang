@@ -76,32 +76,35 @@ main_body{
     call(writeArray,{"Sorted array:",16,id(x)})
 })
  --- TYPE CHECKING  ---
-main:
-    { writeString : PROC , [ str:BYTE[] ] }
+Global:
+    { writeString : PROC , [ s:BYTE[] refrence:true ] }
     { readInteger : INT }
-    { writeInteger : PROC , [ int:INT ] }
-    { strlen : INT , [ str:BYTE[] ] }
-    { bsort : PROC , [ n:INT , x:INT[] ] }
-    bsort:
-        { n : INT }
+    { writeInteger : PROC , [ n:INT refrence:false ] }
+    { strlen : INT , [ s:BYTE[] refrence:true ] }
+    main:
+        { main : PROC }
+        { bsort : PROC , [ n:INT refrence:false , x:INT[] refrence:true ] }
+        bsort:
+            { n : INT , refrence : false }
+            { x : INT[] , refrence : true }
+            { swap : PROC , [ x:INT refrence:true , y:INT refrence:true ] }
+            swap:
+                { x : INT , refrence : true }
+                { y : INT , refrence : true }
+                { t : INT }
+            END swap
+            { changed : BYTE }
+            { i : INT }
+        END bsort
+        { writeArray : PROC , [ msg:BYTE[] refrence:true , n:INT refrence:false , x:INT[] refrence:true ] }
+        writeArray:
+            { msg : BYTE[] , refrence : true }
+            { n : INT , refrence : false }
+            { x : INT[] , refrence : true }
+            { i : INT }
+        END writeArray
+        { seed : INT }
         { x : INT[] }
-        { swap : PROC , [ x:INT , y:INT ] }
-        swap:
-            { x : INT }
-            { y : INT }
-            { t : INT }
-        END swap
-        { changed : BYTE }
         { i : INT }
-    END bsort
-    { writeArray : PROC , [ msg:BYTE[] , n:INT , x:INT[] ] }
-    writeArray:
-        { msg : BYTE[] }
-        { n : INT }
-        { x : INT[] }
-        { i : INT }
-    END writeArray
-    { seed : INT }
-    { x : INT[] }
-    { i : INT }
-END main
+    END main
+END Global

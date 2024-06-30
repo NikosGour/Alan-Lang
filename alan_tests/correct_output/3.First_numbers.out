@@ -77,17 +77,20 @@ main_body{
     call(writeString,{"\n"})
 })
  --- TYPE CHECKING  ---
-main:
-    { writeString : PROC , [ str:BYTE[] ] }
+Global:
+    { writeString : PROC , [ s:BYTE[] refrence:true ] }
     { readInteger : INT }
-    { writeInteger : PROC , [ int:INT ] }
-    { strlen : INT , [ str:BYTE[] ] }
-    { prime : INT , [ n:INT ] }
-    prime:
-        { n : INT }
-        { i : INT }
-    END prime
-    { limit : INT }
-    { number : INT }
-    { counter : INT }
-END main
+    { writeInteger : PROC , [ n:INT refrence:false ] }
+    { strlen : INT , [ s:BYTE[] refrence:true ] }
+    main:
+        { main : PROC }
+        { prime : INT , [ n:INT refrence:false ] }
+        prime:
+            { n : INT , refrence : false }
+            { i : INT }
+        END prime
+        { limit : INT }
+        { number : INT }
+        { counter : INT }
+    END main
+END Global

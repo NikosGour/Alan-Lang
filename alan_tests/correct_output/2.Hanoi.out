@@ -39,22 +39,25 @@ solve_body{
     call(hanoi,{id(NumberOfRings),"left","right","middle"})
 })
  --- TYPE CHECKING  ---
-solve:
-    { writeString : PROC , [ str:BYTE[] ] }
+Global:
+    { writeString : PROC , [ s:BYTE[] refrence:true ] }
     { readInteger : INT }
-    { writeInteger : PROC , [ int:INT ] }
-    { strlen : INT , [ str:BYTE[] ] }
-    { hanoi : PROC , [ rings:INT , source:BYTE[] , target:BYTE[] , auxiliary:BYTE[] ] }
-    hanoi:
-        { rings : INT }
-        { source : BYTE[] }
-        { target : BYTE[] }
-        { auxiliary : BYTE[] }
-        { move : PROC , [ source:BYTE[] , target:BYTE[] ] }
-        move:
-            { source : BYTE[] }
-            { target : BYTE[] }
-        END move
-    END hanoi
-    { NumberOfRings : INT }
-END solve
+    { writeInteger : PROC , [ n:INT refrence:false ] }
+    { strlen : INT , [ s:BYTE[] refrence:true ] }
+    solve:
+        { solve : PROC }
+        { hanoi : PROC , [ rings:INT refrence:false , source:BYTE[] refrence:true , target:BYTE[] refrence:true , auxiliary:BYTE[] refrence:true ] }
+        hanoi:
+            { rings : INT , refrence : false }
+            { source : BYTE[] , refrence : true }
+            { target : BYTE[] , refrence : true }
+            { auxiliary : BYTE[] , refrence : true }
+            { move : PROC , [ source:BYTE[] refrence:true , target:BYTE[] refrence:true ] }
+            move:
+                { source : BYTE[] , refrence : true }
+                { target : BYTE[] , refrence : true }
+            END move
+        END hanoi
+        { NumberOfRings : INT }
+    END solve
+END Global
