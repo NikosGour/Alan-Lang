@@ -32,7 +32,7 @@ public class IdDef extends Definition {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
 		throw new IllegalStateException("IdDef can't be a statement");
 	}
 	

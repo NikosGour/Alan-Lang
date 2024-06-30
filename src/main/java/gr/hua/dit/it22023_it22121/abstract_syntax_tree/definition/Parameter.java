@@ -4,6 +4,8 @@ import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Definition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
+import java.util.List;
+
 public class Parameter extends Definition {
 	private String  name;
 	private Type    type;
@@ -22,12 +24,11 @@ public class Parameter extends Definition {
 	
 	@Override
 	public void sem(SymbolTable tbl) {
-		tbl.addEntry(this.name , this.type);
-		
+		tbl.addParamEntry(this.name , this.type , this.is_refrence);
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
 		throw new IllegalStateException("Parameter can't be a statement");
 		
 	}

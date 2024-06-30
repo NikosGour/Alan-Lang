@@ -108,16 +108,14 @@ public class Function extends Definition {
 			}
 			else if (definition instanceof Function) {
 				Function def = (Function) definition;
+				Deque<Parameter> params = null;
 				if (def.parameters != null) {
-					Deque<SymbolEntry> params = new LinkedList<>();
+					params = new LinkedList<>();
 					for (Parameter parameter : def.parameters) {
-						params.add(new SymbolEntry(parameter.getName() , parameter.getType()));
+						params.add(parameter);
 					}
-					tbl.addFuncEntry(def.name , def.return_type , params);
 				}
-				else {
-					tbl.addFuncEntry(def.name , def.return_type , null);
-				}
+				tbl.addFuncEntry(def.name , def.return_type , params);
 				tbl.openScope(def.name);
 				def.sem(tbl);
 				tbl.closeScope(def.name);
@@ -130,13 +128,12 @@ public class Function extends Definition {
 		for (Statement statement : this.statements) {
 			statement.sem(tbl);
 		}
-		//		for (Statement statement : this.statements) {
-		//			statement.sem(tbl);
-		//		}
 	}
 	
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
+		this.sem(tbl);
 		StringBuilder params_sb = new StringBuilder();
+		
 		if (this.parameters != null) {
 			for (Parameter parameter : this.parameters) {
 				Type param_type = parameter.getType();
@@ -152,6 +149,7 @@ public class Function extends Definition {
 				params_sb.append(parameter.getName());
 				
 				params_sb.append(", ");
+				
 			}
 			params_sb.delete(params_sb.length() - 2 , params_sb.length());
 		}
@@ -172,7 +170,7 @@ public class Function extends Definition {
 				local_defs_sb.append(Utils.indent(depth + 1));
 				
 				if (local_def instanceof Function) {
-					((Function) local_def).gen(func_defs_sb , depth + 1);
+					((Function) local_def).gen(func_defs_sb , depth + 1 , tbl);
 				}
 				else if (local_def instanceof IdDef) {
 					IdDef local_def_as_IdDef = (IdDef) local_def;
@@ -202,7 +200,7 @@ public class Function extends Definition {
 		if (this.statements != null) {
 			for (Statement statement : this.statements) {
 				sb.append(Utils.indent(depth + 1));
-				statement.gen(sb , depth + 1);
+				statement.gen(sb , depth + 1 , tbl);
 				if (statement instanceof IdDef || statement instanceof If || statement instanceof While || statement instanceof Return) {
 				}
 				else {

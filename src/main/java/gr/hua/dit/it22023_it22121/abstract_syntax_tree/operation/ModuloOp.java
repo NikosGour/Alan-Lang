@@ -1,8 +1,11 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.operation;
 
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Function;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
+
+import java.util.List;
 
 public class ModuloOp extends BinOp {
 	public ModuloOp(Expression l , Expression r) {
@@ -34,10 +37,10 @@ public class ModuloOp extends BinOp {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
-		this.l.gen(sb , depth);
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
+		this.l.gen(sb , depth , tbl);
 		sb.append(" % ");
-		this.r.gen(sb , depth);
+		this.r.gen(sb , depth , tbl);
 		
 	}
 	

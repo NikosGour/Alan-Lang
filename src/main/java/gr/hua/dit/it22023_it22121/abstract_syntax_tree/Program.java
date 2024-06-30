@@ -24,18 +24,14 @@ public class Program {
 	}
 	
 	public void sem(SymbolTable tbl) {
+		Deque<Parameter> params = null;
 		if (this.main.getParameters() != null) {
-			Deque<SymbolEntry> params = new LinkedList<>();
-			for (Parameter parameter : this.main.getParameters()) {
-				params.add(new SymbolEntry(parameter.getName() , parameter.getType()));
-			}
-			tbl.addFuncEntry(this.main.getName() , this.main.getReturn_type() , params);
+			params = new LinkedList<>(this.main.getParameters());
 		}
-		else {
-			tbl.addFuncEntry(this.main.getName() , this.main.getReturn_type() , null);
-		}
+		tbl.addFuncEntry(this.main.getName() , this.main.getReturn_type() , params);
 		this.main.sem(tbl);
 		tbl.closeScope(main.getName());
+		tbl.closeScope("Global");
 	}
 	
 	public void sem(boolean debug) {
@@ -43,7 +39,15 @@ public class Program {
 	}
 	
 	public void gen(StringBuilder sb) {
-		this.main.gen(sb , 1);
+		SymbolTable tbl = new SymbolTable(main.getName() , true);
+		Deque<Parameter> params = null;
+		if (this.main.getParameters() != null) {
+			params = new LinkedList<>(this.main.getParameters());
+		}
+		tbl.addFuncEntry(this.main.getName() , this.main.getReturn_type() , params);
+		this.main.sem(tbl);
+		
+		this.main.gen(sb , 1 , tbl);
 		sb.append(Utils.indent(1));
 		if (this.main.getName().equals("main")) {
 			sb.append("_main();\n");
@@ -51,5 +55,8 @@ public class Program {
 		else {
 			sb.append(this.main.getName() + "();\n");
 		}
+		
+		tbl.closeScope(main.getName());
+		tbl.closeScope("Global");
 	}
 }

@@ -2,7 +2,7 @@ main () : proc
 
     bsort (n : int, x : reference int []) : proc
 
-        swap (x : reference int, y : reference int) : proc
+        swap (x : reference int , y : reference int) : proc
             t : int;
         {
             t = x;

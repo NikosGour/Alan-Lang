@@ -3,10 +3,13 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction;
 import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.ArrayAccess;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Id;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Function;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
+
+import java.util.List;
 
 public class Assignment extends Statement {
 	private Expression id;
@@ -92,19 +95,20 @@ public class Assignment extends Statement {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
 		if (id instanceof ArrayAccess) {
 			ArrayAccess id_array = (ArrayAccess) id;
 			sb.append(id_array.getName());
 			sb.append("[");
-			id_array.getIndex().gen(sb , depth);
+			id_array.getIndex().gen(sb , depth , tbl);
 			sb.append("]");
 		}
 		else {
-			sb.append(((Id) id).getName());
+			id.gen(sb , depth , tbl);
+			//			sb.append(((Id) id).getName());
 		}
 		sb.append(" = ");
-		e.gen(sb , depth);
+		e.gen(sb , depth , tbl);
 		
 	}
 }

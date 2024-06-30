@@ -18,4 +18,17 @@ public class Scope {
 	}
 	
 	private Map<String, SymbolEntry> locals;
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Scope:\n");
+		for (Map.Entry<String, SymbolEntry> entry : locals.entrySet()) {
+			sb.append(entry.getKey());
+			sb.append(" -> ");
+			sb.append(entry.getValue().getType());
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
 }

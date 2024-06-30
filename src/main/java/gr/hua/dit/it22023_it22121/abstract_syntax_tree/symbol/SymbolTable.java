@@ -1,6 +1,7 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol;
 
 import gr.hua.dit.it22023_it22121.Utils;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Parameter;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
@@ -23,22 +24,27 @@ public class SymbolTable {
 		if (debug) {
 			System.out.println(" --- TYPE CHECKING  ---");
 		}
-		openScope(name);
+		openScope("Global");
 		
 		// Built-in functions
-		Deque<SymbolEntry> writeStringParams = new LinkedList<>();
-		writeStringParams.add(new SymbolEntry("str" , new ArrayType(BasicType.Byte)));
-		this.addFuncEntry("writeString" , BasicType.Proc , writeStringParams);
+		LinkedList<Parameter> params = new LinkedList<>();
+		Parameter p = new Parameter("s" , new ArrayType(BasicType.Byte) , true);
+		params.add(p);
+		this.addFuncEntry("writeString" , BasicType.Proc , params);
 		
 		this.addFuncEntry("readInteger" , BasicType.Int , null);
 		
-		Deque<SymbolEntry> writeIntegerParams = new LinkedList<>();
-		writeIntegerParams.add(new SymbolEntry("int" , BasicType.Int));
-		this.addFuncEntry("writeInteger" , BasicType.Proc , writeIntegerParams);
+		params = new LinkedList<>();
+		p      = new Parameter("n" , BasicType.Int , false);
+		params.add(p);
+		this.addFuncEntry("writeInteger" , BasicType.Proc , params);
 		
-		Deque<SymbolEntry> strlenParams = new LinkedList<>();
-		strlenParams.add(new SymbolEntry("str" , new ArrayType(BasicType.Byte)));
-		this.addFuncEntry("strlen" , BasicType.Int , strlenParams);
+		params = new LinkedList<>();
+		p      = new Parameter("s" , new ArrayType(BasicType.Byte) , true);
+		params.add(p);
+		this.addFuncEntry("strlen" , BasicType.Int , params);
+		
+		openScope(name);
 	}
 	
 	public SymbolEntry lookup(String sym) {
@@ -64,27 +70,29 @@ public class SymbolTable {
 		s.addEntry(sym , new SymbolEntry(sym , t));
 	}
 	
-	public void addFuncEntry(String sym , Type t , Deque<SymbolEntry> params) {
-		StringJoiner sj = new StringJoiner(" , " , "[ " , " ]");
-		if (params != null) {
-			if (debug) {
-				
-				for (SymbolEntry p : params) {
-					sj.add(p.getVarName() + ":" + p.getType().toString());
+	public void addParamEntry(String sym , Type t , Boolean is_refrence) {
+		if (debug) {
+			System.out.printf(Utils.indent(depth) + "{ %s : %s , refrence : %s }\n" , sym , t.toString() , is_refrence);
+		}
+		Scope s = scopes.getFirst();
+		s.addEntry(sym , new ParamSymbolEntry(sym , t , is_refrence));
+	}
+	
+	public void addFuncEntry(String sym , Type t , Deque<Parameter> params) {
+		if (debug) {
+			StringJoiner sj = new StringJoiner(" , " , "[ " , " ]");
+			if (params != null) {
+				for (Parameter p : params) {
+					sj.add(p.getName() + ":" + p.getType().toString() + " refrence:" + p.is_refrence());
 				}
 				System.out.printf(Utils.indent(depth) + "{ %s : %s , %s }\n" , sym , t.toString() , sj.toString());
 			}
-			Scope s = scopes.getFirst();
-			s.addEntry(sym , new FuncSymbolEntry(sym , t , params));
-		}
-		else {
-			if (debug) {
+			else {
 				System.out.printf(Utils.indent(depth) + "{ %s : %s }\n" , sym , t.toString());
 			}
-			Scope s = scopes.getFirst();
-			s.addEntry(sym , new FuncSymbolEntry(sym , t));
-			
 		}
+		Scope s = scopes.getFirst();
+		s.addEntry(sym , new FuncSymbolEntry(sym , t , params));
 	}
 	
 	public void openScope(String name) {
@@ -104,5 +112,5 @@ public class SymbolTable {
 		
 	}
 	
-	private Deque<Scope> scopes;
+	public Deque<Scope> scopes;
 }

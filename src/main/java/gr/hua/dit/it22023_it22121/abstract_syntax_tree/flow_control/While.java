@@ -4,11 +4,13 @@ import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Return;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Function;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.IdDef;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.BasicType;
 
 import java.util.Deque;
+import java.util.List;
 import java.util.StringJoiner;
 
 public class While extends Statement {
@@ -67,15 +69,15 @@ public class While extends Statement {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
 		sb.append("while (");
-		this.condition.gen(sb , depth);
+		this.condition.gen(sb , depth , tbl);
 		sb.append(") ");
 		if (thens != null) {
 			sb.append("{\n");
 			for (Statement statement : thens) {
 				sb.append(Utils.indent(depth + 1));
-				statement.gen(sb , depth + 1);
+				statement.gen(sb , depth + 1 , tbl);
 				if (statement instanceof IdDef || statement instanceof If || statement instanceof While || statement instanceof Return) {
 				}
 				else {
@@ -86,7 +88,7 @@ public class While extends Statement {
 		}
 		else {
 			sb.append(" ");
-			this.then.gen(sb , depth + 1);
+			this.then.gen(sb , depth + 1 , tbl);
 			sb.append(";\n");
 		}
 		

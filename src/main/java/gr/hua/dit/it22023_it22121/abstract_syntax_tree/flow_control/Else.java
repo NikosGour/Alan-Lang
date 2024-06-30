@@ -4,9 +4,12 @@ import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.Return;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Condition;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Statement;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Function;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.IdDef;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 
 import java.util.Deque;
+import java.util.List;
 import java.util.StringJoiner;
 
 public class Else extends If {
@@ -52,13 +55,13 @@ public class Else extends If {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
-		super.gen(sb , depth);
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
+		super.gen(sb , depth , tbl);
 		if (elses != null) {
 			sb.append(Utils.indent(depth) + "else{\n");
 			for (Statement statement : elses) {
 				sb.append(Utils.indent(depth + 1));
-				statement.gen(sb , depth + 1);
+				statement.gen(sb , depth + 1 , tbl);
 				if (statement instanceof IdDef || statement instanceof If || statement instanceof While || statement instanceof Return) {
 				}
 				else {
@@ -69,7 +72,7 @@ public class Else extends If {
 		}
 		else {
 			sb.append(Utils.indent(depth) + "else ");
-			elses_then.gen(sb , depth + 1);
+			elses_then.gen(sb , depth + 1 , tbl);
 			if (elses_then instanceof IdDef || elses_then instanceof If || elses_then instanceof While || elses_then instanceof Return) {
 			}
 			else {

@@ -2,15 +2,16 @@ package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
 import gr.hua.dit.it22023_it22121.Utils;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Function;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.definition.Parameter;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.literal.StringLiteral;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.FuncSymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.ArrayType;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.DelayQueue;
 
 public class FunctionCall extends Expression {
@@ -49,7 +50,7 @@ public class FunctionCall extends Expression {
 			throw new IllegalArgumentException("Symbol `" + this.name + "` is not a function");
 		}
 		FuncSymbolEntry funcSymbolEntry = (FuncSymbolEntry) symbolEntry;
-		Deque<SymbolEntry> symbol_entry_params = funcSymbolEntry.getParams();
+		Deque<Parameter> symbol_entry_params = funcSymbolEntry.getParams();
 		
 		if (this.call_params != null && symbol_entry_params == null) {
 			throw new IllegalArgumentException("Function `" + this.name + "` does not accept any parameters");
@@ -81,7 +82,7 @@ public class FunctionCall extends Expression {
 			
 			int i = 0;
 			LinkedList<Expression> call_params = new LinkedList<>(this.call_params);
-			for (SymbolEntry param : symbol_entry_params) {
+			for (Parameter param : symbol_entry_params) {
 				Expression e = call_params.removeFirst();
 				e.sem(tbl);
 				
@@ -119,17 +120,28 @@ public class FunctionCall extends Expression {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
+		FuncSymbolEntry funcSymbolEntry = (FuncSymbolEntry) tbl.lookupRec(this.name);
+		List<Parameter> params = null;
+		if (funcSymbolEntry.getParams() != null) {
+			params = new LinkedList<>(funcSymbolEntry.getParams());
+		}
 		sb.append(this.name);
 		sb.append("(");
 		if (this.call_params != null) {
 			boolean first = true;
+			int i = 0;
 			for (Expression param : this.call_params) {
 				if (! first) {
 					sb.append(",");
 				}
-				param.gen(sb , depth);
+				if (params.get(i).is_refrence() && ! (params.get(i).getType() instanceof ArrayType)) {
+					sb.append("&");
+				}
+				
+				param.gen(sb , depth , tbl);
 				first = false;
+				i++;
 			}
 		}
 		sb.append(")");

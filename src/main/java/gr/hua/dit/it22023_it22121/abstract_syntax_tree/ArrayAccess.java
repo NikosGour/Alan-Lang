@@ -1,6 +1,7 @@
 package gr.hua.dit.it22023_it22121.abstract_syntax_tree;
 
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.abstraction.Expression;
+import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.Scope;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolEntry;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.symbol.SymbolTable;
 import gr.hua.dit.it22023_it22121.abstract_syntax_tree.type.Type;
@@ -26,10 +27,10 @@ public class ArrayAccess extends Expression {
 	}
 	
 	@Override
-	public void gen(StringBuilder sb , int depth) {
+	public void gen(StringBuilder sb , int depth , SymbolTable tbl) {
 		sb.append(this.name);
 		sb.append("[");
-		this.index.gen(sb , depth);
+		this.index.gen(sb , depth , tbl);
 		sb.append("]");
 		
 	}
@@ -48,7 +49,17 @@ public class ArrayAccess extends Expression {
 			throw new RuntimeException("Variable " + this.name + " not declared");
 		}
 		if (get_element_type) {
-			return ((ArrayType) symbolEntry.getType()).getElementType();
+			try {
+				return ((ArrayType) symbolEntry.getType()).getElementType();
+			}
+			catch (Exception e) {
+				System.out.printf("Variable %s is not an array\n" , this.name);
+				System.out.printf("Variable %s is of type %s\n" , this.name , symbolEntry.getType());
+				for (Scope scope : tbl.scopes) {
+					System.out.println(scope);
+				}
+				throw e;
+			}
 		}
 		return symbolEntry.getType();
 		
