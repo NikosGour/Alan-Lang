@@ -94,3 +94,4 @@ Global:
         { counter : INT }
     END main
 END Global
+Compilation successful, executable is at alan_code_gen/bin/3.First_numbers

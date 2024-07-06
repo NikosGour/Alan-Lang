@@ -10,7 +10,7 @@ colorama_init(autoreset=True)
 LOGS_DIR = "logs"
 MVN_LOGFILE_PATH = os.path.join(LOGS_DIR, "mvn.logs")
 test_files = glob.glob("alan_tests/test_files/*")
-FLAGS = "--typecheck-debug"
+FLAGS = "--typecheck-debug --debug"
 
 
 def log_info(msg):

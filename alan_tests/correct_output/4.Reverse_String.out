@@ -42,3 +42,4 @@ Global:
         END reverse
     END main
 END Global
+Compilation successful, executable is at alan_code_gen/bin/4.Reverse_String

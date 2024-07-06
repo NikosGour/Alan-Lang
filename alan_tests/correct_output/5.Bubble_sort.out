@@ -108,3 +108,4 @@ Global:
         { i : INT }
     END main
 END Global
+Compilation successful, executable is at alan_code_gen/bin/5.Bubble_sort

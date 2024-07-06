@@ -18,9 +18,11 @@ public class Main {
 		boolean COMPILE = true;
 		boolean SEMANTIC_DEBUG = false;
 		boolean EXECUTE = false;
+		boolean DEBUG = false;
 		Pattern typecheck_debug = Pattern.compile("^--typecheck-debug$");
 		Pattern lexer_only = Pattern.compile("^--lexer-only$");
 		Pattern execute = Pattern.compile("^-x$");
+		Pattern debug = Pattern.compile("^--debug$");
 		if (args.length < 1) {
 			printUsage();
 			System.exit(1);
@@ -31,15 +33,15 @@ public class Main {
 			for (int i = 1; i < args.length; i++) {
 				if (typecheck_debug.matcher(args[i]).matches()) {
 					SEMANTIC_DEBUG = true;
-					System.out.println("Typecheck debug enabled");
 				}
 				else if (lexer_only.matcher(args[i]).matches()) {
 					COMPILE = false;
-					System.out.println("Lexer only mode enabled");
 				}
 				else if (execute.matcher(args[i]).matches()) {
 					EXECUTE = true;
-					System.out.println("Execute mode enabled");
+				}
+				else if (debug.matcher(args[i]).matches()) {
+					DEBUG = true;
 				}
 				else {
 					System.out.printf("Unknown option `%s`\n" , args[i]);
@@ -69,8 +71,13 @@ public class Main {
 		if (COMPILE) {
 			
 			Program result = (Program) parser.parse().value;
-			System.out.println(result.toString(0));
-			result.sem(SEMANTIC_DEBUG);
+			if (DEBUG) {
+				System.out.println(result.toString(0));
+				result.sem(SEMANTIC_DEBUG);
+			}
+			else {
+				result.sem(false);
+			}
 			
 			Path file_name = file_name_with_path.getFileName();
 			String file_name_no_ext = file_name.toString().substring(0 , file_name.toString().lastIndexOf('.'));
@@ -132,6 +139,6 @@ public class Main {
 	}
 	
 	private static void printUsage() {
-		System.out.println("Usage: java -jar <jarfile> <filename> [--lexer-only|--typecheck-debug|-x]");
+		System.out.println("Usage: java -jar <jarfile> <filename> [--lexer-only|--typecheck-debug|-x|--debug]");
 	}
 }

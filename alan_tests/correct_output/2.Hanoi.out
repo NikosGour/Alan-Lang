@@ -61,3 +61,4 @@ Global:
         { NumberOfRings : INT }
     END solve
 END Global
+Compilation successful, executable is at alan_code_gen/bin/2.Hanoi
