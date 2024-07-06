@@ -9,6 +9,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 public class Main {
 	
@@ -16,7 +17,10 @@ public class Main {
 		
 		boolean COMPILE = true;
 		boolean SEMANTIC_DEBUG = false;
-		
+		boolean EXECUTE = false;
+		Pattern typecheck_debug = Pattern.compile("^--typecheck-debug$");
+		Pattern lexer_only = Pattern.compile("^--lexer-only$");
+		Pattern execute = Pattern.compile("^-x$");
 		if (args.length < 1) {
 			printUsage();
 			System.exit(1);
@@ -24,17 +28,36 @@ public class Main {
 		
 		if (args.length > 1) {
 			
-			if (args[1].equals("--lexer-only")) {
-				COMPILE = false;
+			for (int i = 1; i < args.length; i++) {
+				if (typecheck_debug.matcher(args[i]).matches()) {
+					SEMANTIC_DEBUG = true;
+					System.out.println("Typecheck debug enabled");
+				}
+				else if (lexer_only.matcher(args[i]).matches()) {
+					COMPILE = false;
+					System.out.println("Lexer only mode enabled");
+				}
+				else if (execute.matcher(args[i]).matches()) {
+					EXECUTE = true;
+					System.out.println("Execute mode enabled");
+				}
+				else {
+					System.out.printf("Unknown option `%s`\n" , args[i]);
+					printUsage();
+					System.exit(1);
+				}
 			}
-			else if (args[1].equals("--typecheck-debug")) {
-				SEMANTIC_DEBUG = true;
-			}
-			else {
-				System.out.printf("Unknown option `%s`\n" , args[1]);
-				printUsage();
-				System.exit(1);
-			}
+			//			if (args[1].equals("--lexer-only")) {
+			//				COMPILE = false;
+			//			}
+			//			else if (args[1].equals("--typecheck-debug")) {
+			//				SEMANTIC_DEBUG = true;
+			//			}
+			//			else {
+			//				System.out.printf("Unknown option `%s`\n" , args[1]);
+			//				printUsage();
+			//				System.exit(1);
+			//			}
 		}
 		
 		Path file_name_with_path = Paths.get(args[0]);
@@ -77,7 +100,17 @@ public class Main {
 				System.exit(1);
 			}
 			
-			System.out.println("Compilation successful, executable is at " + output_executable);
+			if (EXECUTE) {
+				System.out.println("Compilation successful, executing " + output_executable);
+				System.out.println("---------------------------------------------");
+				pb = new ProcessBuilder(output_executable.toString());
+				pb.inheritIO();
+				p = pb.start();
+				p.waitFor();
+			}
+			else {
+				System.out.println("Compilation successful, executable is at " + output_executable);
+			}
 			Files.deleteIfExists(output_file_c);
 			
 		}
@@ -99,6 +132,6 @@ public class Main {
 	}
 	
 	private static void printUsage() {
-		System.out.println("Usage: java -jar <jarfile> <filename> [--lexer-only|--typecheck-debug]");
+		System.out.println("Usage: java -jar <jarfile> <filename> [--lexer-only|--typecheck-debug|-x]");
 	}
 }
